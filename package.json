@@ -1,0 +1,25 @@
+{
+  "name": "seltexisserver",
+  "version": "1.0.0",
+  "description": "node server to seltexis",
+  "main": "seltexisserver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --harmony seltexisserver.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yahooserg/seltexisserver.git"
+  },
+  "author": "Sergei Ovcharov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yahooserg/seltexisserver/issues"
+  },
+  "homepage": "https://github.com/yahooserg/seltexisserver#readme",
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.3",
+    "mysql": "^2.13.0"
+  }
+}
