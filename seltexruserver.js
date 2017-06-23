@@ -1,39 +1,15 @@
 /*jslint nomen: true, node: true, unparam: true, white: true*/
 (function () {
   "use strict";
-  // var test = require('./test');
-  // console.log(test);
-  // return;
 
   var express = require('express'),
-    // cookieParser = require('cookie-parser'),
     app = express(),
     mysql = require('mysql'),
     mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
     port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
-    // myFunctions = require('./myfunctions'),
-    // getTimeString = myFunctions.getTimeString,
-    // getDateString = myFunctions.getDateString,
-    // https = require('https'),
-    // fs = require('fs'),
-    // privateKey,
-    // certificate,
-    // credentials,
-    // httpsServer;
     http,
     httpServer;
 
-  //UNCOMMENT FOR production
-  //
-  // privateKey = fs.readFileSync(__dirname + '/../ssl.key');
-  // certificate = fs.readFileSync(__dirname + '/../ssl.crt');
-  // credentials = {key: privateKey, cert: certificate};
-  // httpsServer = https.createServer(credentials, app);
-  // httpsServer.listen(5555, function () {
-  // });
-
-  //COMMENT FOR production
-  //
   http = require('http');
   httpServer = http.createServer(app);
   httpServer.listen(port, function () {
