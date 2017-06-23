@@ -1,22 +1,22 @@
 {
-  "name": "seltexisserver",
+  "name": "seltexruserver",
   "version": "1.0.0",
-  "description": "node server to seltexis",
+  "description": "node server to seltexru",
   "main": "seltexisserver.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --harmony seltexisserver.js"
+    "start": "nodemon --harmony seltexruserver.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yahooserg/seltexisserver.git"
+    "url": "git+https://github.com/yahooserg/seltexruserver.git"
   },
   "author": "Sergei Ovcharov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yahooserg/seltexisserver/issues"
+    "url": "https://github.com/yahooserg/seltexruserver/issues"
   },
-  "homepage": "https://github.com/yahooserg/seltexisserver#readme",
+  "homepage": "https://github.com/yahooserg/seltexruserver#readme",
   "dependencies": {
     "ejs": "^2.5.6",
     "express": "^4.15.3",

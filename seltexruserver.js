@@ -9,7 +9,8 @@
     // cookieParser = require('cookie-parser'),
     app = express(),
     mysql = require('mysql'),
-    mysqlConnection = require(__dirname + '/../seltexisserverconfig/dbconnectmysqlnode.js'),
+    mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
+    port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
     // myFunctions = require('./myfunctions'),
     // getTimeString = myFunctions.getTimeString,
     // getDateString = myFunctions.getDateString,
@@ -35,8 +36,8 @@
   //
   http = require('http');
   httpServer = http.createServer(app);
-  httpServer.listen(5555, function () {
-    console.log('start');
+  httpServer.listen(port, function () {
+    console.log('start ' + port);
   });
 
   app.use('/assets', express.static(__dirname + '/public'));
