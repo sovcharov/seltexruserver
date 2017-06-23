@@ -12,9 +12,7 @@
 
   http = require('http');
   httpServer = http.createServer(app);
-  httpServer.listen(port, function () {
-    console.log('start ' + port);
-  });
+  httpServer.listen(port);
 
   app.use('/assets', express.static(__dirname + '/public'));
 
@@ -40,7 +38,7 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      console.log(rows[0]);
+      // console.log(rows[0]);
       res.render('index', {part: rows[0]});
     });
 

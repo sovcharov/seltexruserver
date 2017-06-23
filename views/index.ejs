@@ -80,11 +80,25 @@
     <div id="top" class="navbar-space"></div>
     <div class="navbar-space"></div>
     <div class="navbar-space"></div>
+    <div class="navbar-space"></div>
+
+
+
     <div class="col-xs-12">
-        <section  class="my-part-description">
+        <div  class="jumbotron my-part-description container">
             <h1> <%= part.description %> </h1>
-        </section>
+            <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></p>
+            <p>Остаток на складе: <span><%= part.stock %></span> шт.</p>
+            <p>Скоро поступят на склад (в пути): <span><%= part.ordered %></span> шт.</p>
+            <% if (part.image) { %>
+              <img src="/assets/img/c15.jpg" alt="..." class="img-rounded my-part-image">
+            <% } else { %>
+              <img src="/assets/img/nophoto.png" alt="Нет фотографии" class="img-responsive img-rounded  my-part-image">
+            <% } %>
+        </div>
     </div>
+
+
     <div class="tooltip">Hover over me
       <span class="tooltiptext">Tooltip text</span>
     </div>
