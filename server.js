@@ -7,6 +7,7 @@
     mysql = require('mysql'),
     mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
     port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
+    staticSitePath = require(__dirname + '/../serverconfig/nodeconfig.js').staticSitePath,
     http,
     httpServer;
 
@@ -15,6 +16,8 @@
   httpServer.listen(port);
 
   app.use('/assets', express.static(__dirname + '/public'));
+  app.use('/', express.static(__dirname + staticSitePath));
+
 
   app.set('view engine', 'ejs');
 
@@ -41,6 +44,13 @@
       // console.log(rows[0]);
       res.render('index', {part: rows[0]});
     });
+
+  });
+
+  app.get('/catalog/', function (req, res) {
+
+      res.render('index', {part: {description: 'hkjl', qty: 12, qtyOrdered: 2}});
+
 
   });
 

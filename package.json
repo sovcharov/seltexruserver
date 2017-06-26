@@ -5,7 +5,7 @@
   "main": "seltexisserver.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --harmony seltexruserver.js"
+    "start": "nodemon --harmony server.js"
   },
   "repository": {
     "type": "git",
