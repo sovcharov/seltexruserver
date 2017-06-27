@@ -49,27 +49,55 @@
 
   });
 
-  app.get(['/catalog/:search','/catalog/'], function (req, response) {
+  app.get(['/catalog/:search','/catalog/'], function (req, res) {
 
     var query = '',
       connection = mysql.createConnection(mysqlConnection),
       search = '',
-      i,
-      items = [];
+      items = [],
+      getRidOfEmptyItems,
+      createComplicatedQuery,
+      checkIfCat;
+
+    getRidOfEmptyItems = function (arr) {
+      var i;
+      for (i = 0; i < arr.length; i += 1) {
+        if (!arr[i]) {
+          arr.splice(i,1);
+          i -= 1;
+        }
+      }
+      return arr;
+    };
+
+    checkIfCat = function (part) {
+      return part;
+    };
+
+    createComplicatedQuery = function (arr) {
+      var i,
+       str = '';
+      for (i = 0; i < arr.length; i += 1) {
+        if (i === 0) {
+          str = "(Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+        } else {
+          str = str + " AND (Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+        }
+      }
+      str = "SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p where " + str + "and description not like N'я%' order by p.Description";
+      return str;
+    };
 
     //prepare sql query
     if (req.params.search) {
       search = req.params.search;
       search = search.split(' ');
-      for (i = 0; i < search.length; i += 1) {
-        if (!search[i]) {
-          search.splice(i,1);
-          i -= 1;
-        }
-      }
-      console.log(search);
+      search = getRidOfEmptyItems(search);
+      query = createComplicatedQuery(search);
+
+      console.log(query);
     } else {
-      query = 'SELECT p.ID as ProductID, p.Description AS ProductName, p.Price as ListPrice, p.Numbers AS CategoryName, p.stock as qty, p.ordered as qtyOrdered, p.link as link from inventory as p order by p.Description limit 10';
+      query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p order by p.Description limit 10';
     }
 
     query = connection.query(query);
@@ -79,14 +107,14 @@
           items[items.length] = row;
       })
       .on('end', function () {
-        response.render('search', {searchPhrase: search, items: items, length: items.length});
+        res.render('search', {searchPhrase: req.params.search, items: items, length: items.length});
 
       });
 
-    // response.render('search', {searchPhrase: 'asdf', items : []});
 
     connection.end();
 
+    // res.render('part', {part: {description: 'abk'}});
 
   });
 
