@@ -59,7 +59,7 @@
             <!-- /.navbar-collapse -->
             <form class="col-sm-3 navbar-form navbar-right" role="search" style="height:" action="/catalog/index.php" method="get">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Поиск в каталоге" name="part" value="<?=$_GET["part"];?>">
+                    <input type="text" class="form-control" placeholder="Поиск в каталоге" name="part" value="<%=searchPhrase%>">
                     <span class="input-group-btn">
                         <button class="btn btn-warning my-search-button" type="submit">Поиск</button>
                     </span>
@@ -92,41 +92,76 @@
         <section  class="">
             <table class = "table table-condensed">
                 <tr><th class="">#</th><th>Наименование детали</th><th class="col-xs-1">Цена, <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th><th class="col-xs-1">На складе</th><th class="col-xs-1">В пути</th></tr>
-                <?php
-                $line = 0;
-                foreach($parts as $value) {
-                    $line += 1;
-                    echo '<tr>';
-                    echo '<td>'.$line.'</td>';
-                    if($value['link']) {
-                        $value['description'] = $value['description'] .' <a href="'.$value['link'].'" class="glyphicon glyphicon-search" aria-hidden="true" style="color:red; padding-left:10px;" title="Показать содержание"></a>';
-                    }
-                    echo '<td>'.$value["description"].'</td>';
-                                        // echo '<td>'.$value["description"].' <a href="http://seltex.ru:8080/catalog/'.$value['ProductID'].'" class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank"></a></td>';
-                    if($value["price"]) {
-                        echo '<td>'.number_format($value["price"],2,',',' ').'</td>';
-                    } else {
-                        echo '<td>-</td>';
-                    }
-                    if($value["qty"]=="0") {
-                        echo '<td>'.$value["qty"].'</td>';
+                <%
+                  line = 0;
+                  for (line; line < length; line += 1) {
 
-                    } else if ($value["qty"]>"2") {
-                        echo '<td style="background-color:#B8FFDB">'.$value["qty"].'</td>';
-                    } else {
-                        echo '<td style="background-color:#ffc2b3">'.$value["qty"].'</td>';
-                    }
-                    if($value["qtyOrdered"]=="0") {
-                        echo '<td>'.$value["qtyOrdered"].'</td>';
+                %>
+                  <tr>
+                    <td><%=line+1%></td>
+                    <td><%=items[line].description%>
+                      <%
+                        if(items[line].link) {
+                      %>
+                        <a href="<%=items[line].link%>" class="glyphicon glyphicon-search" aria-hidden="true" style="color:red; padding-left:10px;" title="Показать содержание"></a>
+                      <%
+                        };
+                      %>
+                      <a href="/catalog/part/<%=items[line].id%>" class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank"></a>
+                    </td>
+                    <%
+                      if(items[line].price) {
+                    %>
+                      <td><%=items[line].price%></td>
 
-                    } else if ($value["qtyOrdered"]>"2") {
-                        echo '<td style="background-color:#B8FFDB">'.$value["qtyOrdered"].'</td>';
-                    } else {
-                        echo '<td style="background-color:#ffc2b3">'.$value["qtyOrdered"].'</td>';
-                    }
-                    echo '</tr>';
-                }
-                ?>
+                    <%
+                      } else {
+                    %>
+                      <td>-</td>
+                    <%
+                      };
+                    %>
+
+                    <%
+                      if(items[line].stock == 0) {
+                    %>
+                      <td><%=items[line].stock%></td>
+                    <%
+                    } else if(items[line].stock > 2) {
+                    %>
+                    <td style="background-color:#B8FFDB"><%=items[line].stock%></td>
+                    <%
+                      } else {
+                    %>
+                    <td style="background-color:#ffc2b3"><%=items[line].stock%></td>
+                    <%
+                      };
+                    %>
+
+                    <%
+                      if(items[line].ordered == 0) {
+                    %>
+                      <td><%=items[line].ordered%></td>
+                    <%
+                    } else if(items[line].ordered > 2) {
+                    %>
+                    <td style="background-color:#B8FFDB"><%=items[line].ordered%></td>
+                    <%
+                      } else {
+                    %>
+                    <td style="background-color:#ffc2b3"><%=items[line].ordered%></td>
+                    <%
+                      };
+                    %>
+
+                  </tr>
+                <%
+                  }
+                %>
+
+
+
+
             </table>
         </section>
     </div>
