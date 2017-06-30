@@ -8,6 +8,9 @@
     mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
     port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
     staticSitePath = require(__dirname + '/../serverconfig/nodeconfig.js').staticSitePath,
+    getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
+    createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
+    checkIfCat = require('./functions/myfunctions').checkIfCat,
     http,
     httpServer;
 
@@ -54,39 +57,7 @@
     var query = '',
       connection = mysql.createConnection(mysqlConnection),
       search = '',
-      items = [],
-      getRidOfEmptyItems,
-      createComplicatedQuery,
-      checkIfCat;
-
-    getRidOfEmptyItems = function (arr) {
-      var i;
-      for (i = 0; i < arr.length; i += 1) {
-        if (!arr[i]) {
-          arr.splice(i,1);
-          i -= 1;
-        }
-      }
-      return arr;
-    };
-
-    checkIfCat = function (part) {
-      return part;
-    };
-
-    createComplicatedQuery = function (arr) {
-      var i,
-       str = '';
-      for (i = 0; i < arr.length; i += 1) {
-        if (i === 0) {
-          str = "(Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
-        } else {
-          str = str + " AND (Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
-        }
-      }
-      str = "SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p where " + str + "and description not like N'я%' order by p.Description";
-      return str;
-    };
+      items = [];
 
     //prepare sql query
     if (req.params.search) {
