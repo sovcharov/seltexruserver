@@ -66,7 +66,7 @@
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
     } else {
-      query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p order by p.Description limit 10';
+      query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p order by p.Description';
     }
 
     query = connection.query(query);
@@ -77,20 +77,16 @@
       })
       .on('end', function () {
         res.render('search', {searchPhrase: req.params.search, items: items, length: items.length});
-
       });
 
-
     connection.end();
-
-    // res.render('part', {part: {description: 'abk'}});
 
   });
 
 
   app.get('/*', function (req, res) {
 
-    res.render('notfound', {part: {description: 'Страницы не существует', stock: 0, ordered: 0}});
+    res.render('notfound', {description: 'Страницы не существует'});
 
   });
 
