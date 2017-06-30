@@ -55,7 +55,7 @@
         countCatParts = false;
 
       for (i = 0; i < arr.length; i += 1) {
-
+        //search query with cat style (with'-') or without it
         if (checkIfCat(arr[i])) {
           countCatParts = true;
           if (i === 0) {
@@ -84,4 +84,4 @@
     }
 
   };
-}(this));
+}());

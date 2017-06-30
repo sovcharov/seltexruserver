@@ -65,8 +65,6 @@
       search = search.split(' ');
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
-
-      console.log(query);
     } else {
       query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p order by p.Description limit 10';
     }
