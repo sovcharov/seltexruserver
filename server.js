@@ -87,7 +87,6 @@
 
 
   app.post('/api/sendmail/:phone', function (req, res) {
-    console.log('in sendmail');
     // create reusable transporter object using the default SMTP transport
     var transporter = nodemailer.createTransport({
       host: 'smtp.mail.ru',
@@ -111,11 +110,11 @@
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return console.log(error);
+        // return console.log(error);
         res.send(false);
       }
       res.send('OK');
-      console.log('Message %s sent: %s', info.messageId, info.response);
+      // console.log('Message %s sent: %s', info.messageId, info.response);
     });
   });
 
