@@ -45,7 +45,6 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      // console.log(rows[0]);
       res.render('part', {part: rows[0]});
     });
 

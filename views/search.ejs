@@ -128,6 +128,9 @@
                       <td><%=items[line].stock%></td>
                     <%
                     } else if(items[line].stock > 2) {
+                      if (items[line].stock > 12) {
+                        items[line].stock = "больше 12";
+                      }
                     %>
                     <td style="background-color:#B8FFDB"><%=items[line].stock%></td>
                     <%
@@ -144,6 +147,9 @@
                       <td><%=items[line].ordered%></td>
                     <%
                     } else if(items[line].ordered > 2) {
+                      if (items[line].ordered > 12) {
+                        items[line].ordered = "больше 12";
+                      }
                     %>
                     <td style="background-color:#B8FFDB"><%=items[line].ordered%></td>
                     <%
