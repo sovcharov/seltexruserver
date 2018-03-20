@@ -117,6 +117,10 @@
     });
   });
 
+  app.get('/sis/*', (req, res) => {
+    console.log('insis '+__dirname);
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+  });
 
   app.get('/*', function (req, res) {
 
