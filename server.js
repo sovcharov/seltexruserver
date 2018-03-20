@@ -20,8 +20,9 @@
   httpServer.listen(port);
 
   app.use('/assets', express.static(__dirname + '/public'));
-  app.use('/', express.static(__dirname + staticSitePath));
   app.use('/sis', express.static(__dirname + '../dist'));
+  app.use('/', express.static(__dirname + staticSitePath));
+
 
 
 
@@ -120,8 +121,8 @@
   });
 
   app.get('/sis/*', (req, res) => {
-    console.log('insis '+__dirname);
-    // res.sendFile(path.join(__dirname, 'dist/index.html'));
+    // console.log('insis '+__dirname);
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
   });
 
   app.get('/*', function (req, res) {
