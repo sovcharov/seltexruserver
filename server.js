@@ -20,7 +20,7 @@
   httpServer.listen(port);
 
   app.use('/assets', express.static(__dirname + '/public'));
-  app.use('/sis', express.static(__dirname + '../dist'));
+  // app.use('/sis', express.static(__dirname + '../dist'));
   app.use('/', express.static(__dirname + staticSitePath));
 
 
