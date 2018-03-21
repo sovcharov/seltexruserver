@@ -13,14 +13,15 @@
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
   http,
-  httpServer;
+  httpServer,
+  path = require('path');;
 
   http = require('http');
   httpServer = http.createServer(app);
   httpServer.listen(port);
 
   app.use('/assets', express.static(__dirname + '/public'));
-  // app.use('/sis', express.static(__dirname + '../dist'));
+  // app.use('/sis', express.static(__dirname + '/dist'));
   app.use('/', express.static(__dirname + staticSitePath));
 
 
@@ -120,15 +121,17 @@
     });
   });
 
-  // app.get('/sis/*', (req, res) => {
-  //   // console.log('insis '+__dirname);
-  //   res.sendFile(path.join(__dirname, '../dist/index.html'));
-  // });
+  app.get('/sis/*', function (req, res) {
+    var sisPath = __dirname + staticSitePath + '/sis/index.html';
+    // console.log(path);
+    res.sendFile(path.join(sisPath));
+  });
 
-  app.get('/*', function (req, res) {
-
+  app.get(/^\/(?!sis\/).*$/, function (req, res) {
+    // app.get("/*", function (req, res) { //old get
+    // console.log('inerror ');
+    // res.sendFile(__dirname+'/dist/index.html');
     res.render('notfound', {description: 'Страницы не существует'});
-
   });
 
 }());
