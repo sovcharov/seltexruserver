@@ -9,12 +9,14 @@
   mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
   port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
   staticSitePath = require(__dirname + '/../serverconfig/nodeconfig.js').staticSitePath,
+  emailAuth = require(__dirname + '/../serverconfig/nodeconfig.js').emailAuth,
   getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
   http,
   httpServer,
-  path = require('path');;
+  path = require('path');
+
 
   http = require('http');
   httpServer = http.createServer(app);
@@ -61,7 +63,9 @@
     var query = '',
     connection = mysql.createConnection(mysqlConnection),
     search = '',
-    items = [];
+    items = [],
+    currentId = 0,
+    resultIndex = 0;
 
     //prepare sql query
     if (req.params.search) {
@@ -70,14 +74,23 @@
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
     } else {
-      query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p order by p.Description';
+      query = 'SELECT inventoryManufacturers.name as manufacturerName, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id order by p.Description, inventoryNumbers.main';
     }
 
     query = connection.query(query);
 
     query
     .on('result', function (row, index) {
-      items[items.length] = row;
+      if(currentId !== row.id){
+        currentId = row.id;
+        resultIndex = items.length;
+        items[resultIndex] = row;
+        items[resultIndex].allNumbers = [];
+        items[resultIndex].allNumbers[items[resultIndex].allNumbers.length] = row.number;
+      } else {
+        items[resultIndex].allNumbers[items[resultIndex].allNumbers.length] = row.number;
+      }
+
     })
     .on('end', function () {
       res.render('search', {searchPhrase: req.params.search, items: items, length: items.length});
@@ -95,10 +108,7 @@
       host: 'smtp.mail.ru',
       port: 587,
       secure: false, // secure:true for port 465, secure:false for port 587,
-      auth: {
-        user: 'sales2@seltex.ru',
-        pass: '1qwerty12345'
-      }
+      auth: emailAuth
     }),
 
     // setup email data with unicode symbols

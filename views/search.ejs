@@ -91,11 +91,18 @@
         </div>
         <section  class="">
             <table class = "table table-condensed">
-                <tr><th class="">#</th><th>Наименование детали</th><th class="col-xs-1">Цена, <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th><th class="col-xs-1">На складе</th><th class="col-xs-1">В пути</th></tr>
+                <tr>
+                  <th class="">#</th>
+                  <th>Наименование детали</th>
+                  <th class="col-xs-1">Производитель</th>
+                  <th class="col-xs-3">Номера</th>
+                  <th class="col-xs-1">Цена, <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th>
+                  <th class="col-xs-1">На складе</th>
+                  <th class="col-xs-1">В пути</th>
+                </tr>
                 <%
                   line = 0;
                   for (line; line < length; line += 1) {
-
                 %>
                   <tr>
                     <td><%=line+1%></td>
@@ -108,6 +115,19 @@
                         };
                       %>
                       <a href="/catalog/part/<%=items[line].id%>" class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank"></a>
+                    </td>
+                    <td>
+                      <%=items[line].manufacturerFullName%>
+                    </td>
+                    <td>
+                      <%
+                        allNumbers = '';
+                        i = 0;
+                        for(i = 0; i < items[line].allNumbers.length; i += 1) {
+                          allNumbers = allNumbers + " " + items[line].allNumbers[i];
+                        }
+                      %>
+                      <%=allNumbers%>
                     </td>
                     <%
                       if(items[line].price) {

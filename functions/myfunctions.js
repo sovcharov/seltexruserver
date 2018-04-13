@@ -75,11 +75,11 @@
           }
         }
       }
-      str = "SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p where (" + str + ")";
+      str = "SELECT inventoryManufacturers.name as manufacturerName, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers where (" + str + ")";
       if (countCatParts) {
         str = str + " or (" + catStr + ")";
       }
-      str = str + " and description not like N'я%' order by p.Description";
+      str = str + "and inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and description not like N'я%' order by p.Description, inventoryNumbers.main desc";
       return str;
     }
 
