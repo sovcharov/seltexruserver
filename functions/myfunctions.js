@@ -59,27 +59,27 @@
         if (checkIfCat(arr[i])) {
           countCatParts = true;
           if (i === 0) {
-            str = "(Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
-            catStr = "(Description like N'%"+getCatPart(arr[i])+"%' or Numbers like '%"+getCatPart(arr[i])+"%')";
+            str = "(p.Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+            catStr = "(p.Description like N'%"+getCatPart(arr[i])+"%' or Numbers like '%"+getCatPart(arr[i])+"%')";
           } else {
-            str = str + " AND (Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
-            catStr = catStr + " AND (Description like N'%"+getCatPart(arr[i])+"%' or Numbers like '%"+getCatPart(arr[i])+"%')";
+            str = str + " AND (p.Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+            catStr = catStr + " AND (p.Description like N'%"+getCatPart(arr[i])+"%' or Numbers like '%"+getCatPart(arr[i])+"%')";
           }
         } else {
           if (i === 0) {
-            str = "(Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
-            catStr = "(Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+            str = "(p.Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+            catStr = "(p.Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
           } else {
-            str = str + " AND (Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
-            catStr = catStr + " AND (Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+            str = str + " AND (p.Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
+            catStr = catStr + " AND (p.Description like N'%"+arr[i]+"%' or Numbers like '%"+arr[i]+"%')";
           }
         }
       }
-      str = "SELECT inventoryManufacturers.name as manufacturerName, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers where (" + str + ")";
+      str = "SELECT inventoryDescription.description as description, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where (" + str + ")";
       if (countCatParts) {
         str = str + " or (" + catStr + ")";
       }
-      str = str + "and inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and description not like N'я%' order by p.Description, inventoryNumbers.main desc";
+      str = str + "and inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and inventoryDescription.id = p.id and inventoryComments.id = p.id and p.Description not like N'яя%' order by p.Description, inventoryNumbers.main desc";
       return str;
     }
 

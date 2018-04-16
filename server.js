@@ -74,7 +74,7 @@
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
     } else {
-      query = 'SELECT inventoryManufacturers.name as manufacturerName, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id order by p.Description, inventoryNumbers.main';
+      query = "SELECT inventoryDescription.description as description, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and inventoryDescription.id = p.id and inventoryComments.id = p.id and p.Description not like N'яя%' order by p.Description, inventoryNumbers.main";
     }
 
     query = connection.query(query);

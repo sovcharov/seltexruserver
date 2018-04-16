@@ -103,10 +103,11 @@
                 <%
                   line = 0;
                   for (line; line < length; line += 1) {
+                    description = items[line].description + " " + items[line].comment;
                 %>
                   <tr>
                     <td><%=line+1%></td>
-                    <td><%=items[line].description%>
+                    <td><%=description%>
                       <%
                         if(items[line].link) {
                       %>
