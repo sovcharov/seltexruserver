@@ -10,12 +10,14 @@
   port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
   staticSitePath = require(__dirname + '/../serverconfig/nodeconfig.js').staticSitePath,
   emailAuth = require(__dirname + '/../serverconfig/nodeconfig.js').emailAuth,
+  imagesDir = require(__dirname + '/../serverconfig/nodeconfig.js').imagesDir,
   getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
   http,
   httpServer,
-  path = require('path');
+  path = require('path'),
+  fs = require('fs');
 
 
   http = require('http');
@@ -45,12 +47,25 @@
 
   app.get('/catalog/part/:partId', function (req, res) {
 
-    var query = "SELECT * FROM inventory WHERE id = " + req.params.partId,
+    var query = "SELECT inventoryDescription.description as description, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventoryNumbers, inventory as p, inventoryManufacturers, inventoryDescription, inventoryComments where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and inventoryDescription.id = p.id and inventoryComments.id = p.id and p.Description not like N'яя%' and p.id = " + req.params.partId + " order by inventoryNumbers.main",
     connection = mysql.createConnection(mysqlConnection);
 
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
+      var i = 0;
+      for(i = 0; i < rows.length; i += 1) {
+        if (i === 0) {
+          rows[0].longDescription = rows[0].description + " " + rows[0].comment + " " + rows[0].manufacturerFullName + " " + rows[0].number;
+          rows[0].allNumbers = [];
+          rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[0].number, manufacturer: rows[0].manufacturerFullName};
+        } else {
+          rows[0].longDescription = rows[0].longDescription + " " + rows[i].number;
+          rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[i].number, manufacturer: rows[i].manufacturerFullName};
+
+        }
+      }
+      // console.log(imagesDir);
       res.render('part', {part: rows[0]});
     });
 
@@ -74,7 +89,7 @@
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
     } else {
-      query = "SELECT inventoryDescription.description as description, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and inventoryDescription.id = p.id and inventoryComments.id = p.id and p.Description not like N'яя%' order by p.Description, inventoryNumbers.main";
+      query = "SELECT inventoryDescription.description as description, p.id as id, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, inventoryNumbers.main as main, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where p.id = inventoryNumbers.inventoryId and p.id = inventoryDescription.id and p.id = inventoryComments.id and  inventoryManufacturers.id = inventoryNumbers.manufacturerId and p.Description not like N'яя%' order by p.description";
     }
 
     query = connection.query(query);
@@ -88,7 +103,12 @@
         items[resultIndex].allNumbers = [];
         items[resultIndex].allNumbers[items[resultIndex].allNumbers.length] = row.number;
       } else {
-        items[resultIndex].allNumbers[items[resultIndex].allNumbers.length] = row.number;
+        if (row.main) {
+          items[resultIndex].allNumbers.unshift(row.number);
+          items[resultIndex].manufacturerFullName = row.manufacturerFullName;
+        } else {
+          items[resultIndex].allNumbers[items[resultIndex].allNumbers.length] = row.number;
+        }
       }
 
     })
