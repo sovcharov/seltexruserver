@@ -56,11 +56,11 @@
       var i = 0;
       for(i = 0; i < rows.length; i += 1) {
         if (i === 0) {
-          rows[0].longDescription = rows[0].description + " " + rows[0].comment + " " + rows[0].manufacturerFullName + " " + rows[0].number;
+          rows[0].allNumbersString = rows[0].number;
           rows[0].allNumbers = [];
           rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[0].number, manufacturer: rows[0].manufacturerFullName};
         } else {
-          rows[0].longDescription = rows[0].longDescription + " " + rows[i].number;
+          rows[0].allNumbersString = rows[0].allNumbersString + " " + rows[i].number;
           rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[i].number, manufacturer: rows[i].manufacturerFullName};
 
         }
