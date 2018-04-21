@@ -47,7 +47,7 @@
 
   app.get('/catalog/part/:partId', function (req, res) {
 
-    var query = "SELECT inventoryDescription.description as description, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventoryNumbers, inventory as p, inventoryManufacturers, inventoryDescription, inventoryComments where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and inventoryDescription.id = p.id and inventoryComments.id = p.id and p.Description not like N'яя%' and p.id = " + req.params.partId + " order by inventoryNumbers.main desc",
+    var query = "SELECT inventoryDescription.description as description, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, p.ID as id, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventoryNumbers, inventory1s as p, inventoryManufacturers, inventoryDescription, inventoryComments where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and inventoryDescription.id = p.id and inventoryComments.id = p.id and p.Description not like N'яя%' and p.id = " + req.params.partId + " order by inventoryNumbers.main desc",
     connection = mysql.createConnection(mysqlConnection);
 
     connection.connect();
@@ -89,7 +89,7 @@
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
     } else {
-         query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p order by p.Description';
+         query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link from inventory1s as p order by p.Description';
       // query = "SELECT inventoryDescription.description as description, p.id as id, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, inventoryNumbers.main as main, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where p.id = inventoryNumbers.inventoryId and p.id = inventoryDescription.id and p.id = inventoryComments.id and  inventoryManufacturers.id = inventoryNumbers.manufacturerId and p.Description not like N'яя%' order by p.description";
     }
 
