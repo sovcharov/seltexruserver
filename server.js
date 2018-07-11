@@ -14,15 +14,35 @@
   getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
-  http,
+  http = require('http'),
   httpServer,
+  https = require('https'),
   path = require('path'),
-  fs = require('fs');
+  fs = require('fs'),
+  privateKey,
+  certificate,
+  credentials,
+  httpsServer;
 
 
-  http = require('http');
+
+  app.get('*', function(req, res) {
+      res.redirect('https://www.seltex.ru' + req.url);
+  });
+
+  privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
+  certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
+  credentials = {key: privateKey, cert: certificate};
+  httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(port, function () {
+  });
+
   httpServer = http.createServer(app);
-  httpServer.listen(port);
+  httpServer.listen(3002);
+
+
+
+
 
   app.use('/assets', express.static(__dirname + '/public'));
   // app.use('/sis', express.static(__dirname + '/dist'));
