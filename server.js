@@ -35,10 +35,14 @@
   httpsServer.listen(port, function () {
   });
 
-  http = require('http');
-  http.createServer(function (req, res) {
-    res.redirect('https://' + req.headers.host + req.url);
-  }).listen(3002);
+  http = express.createServer();
+  http.get('*', function(req, res) {
+      res.redirect('https://' + req.headers.host + req.url);
+
+      // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
+      // res.redirect('https://example.com' + req.url);
+  });
+  nttp.listen(3002);
 
 
 
