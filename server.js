@@ -25,12 +25,7 @@
   httpsServer;
 
 
-  http = require('http');
-  http.createServer(function (req, res) {
-    console.log( "https://" + req.headers['host'] + req.url);
-      res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-      res.end();
-  }).listen(3002);
+
   // httpServer = http.createServer(app);
   // httpServer.listen(port);
   privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
@@ -39,6 +34,13 @@
   httpsServer = https.createServer(credentials, app);
   httpsServer.listen(port, function () {
   });
+
+  http = require('http');
+  http.createServer(function (req, res) {
+    console.log( "https://" + req.headers['host'] + req.url);
+      res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+      res.end();
+  }).listen(3002);
 
 
 
