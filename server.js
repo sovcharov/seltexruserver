@@ -39,6 +39,7 @@
   });
 
   app2.get('*', function(req, res) {
+    console.log("HHHHH")
 
       res.redirect('https://' + req.headers.host + req.url);
 
