@@ -37,9 +37,7 @@
 
   http = require('http');
   http.createServer(function (req, res) {
-    console.log( "https://" + req.headers['host'] + req.url);
-      res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-      res.end();
+    res.redirect('https://' + req.headers.host + req.url);
   }).listen(3002);
 
 
