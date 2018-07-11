@@ -4,6 +4,7 @@
 
   var express = require('express'),
   app = express(),
+  app2 = express(),
   mysql = require('mysql'),
   nodemailer = require('nodemailer'),
   mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
@@ -26,8 +27,10 @@
 
 
 
-  // httpServer = http.createServer(app);
-  // httpServer.listen(port);
+  httpServer = http.createServer(app2);
+  httpServer.listen(3002);
+
+
   privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
   certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
   credentials = {key: privateKey, cert: certificate};
@@ -35,8 +38,8 @@
   httpsServer.listen(port, function () {
   });
 
-  app.listen(3002);
-  app.get('*', function(req, res) {
+  app2.get('*', function(req, res) {
+
       res.redirect('https://' + req.headers.host + req.url);
 
       // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
