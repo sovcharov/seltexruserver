@@ -27,8 +27,7 @@
 
 
 
-  httpServer = http.createServer(app2);
-  httpServer.listen(3002);
+
 
 
   privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
@@ -38,6 +37,8 @@
   httpsServer.listen(port, function () {
   });
 
+  httpServer = http.createServer(app);
+  httpServer.listen(3002);
   app2.get('*', function(req, res) {
     console.log("HHHHH")
 
