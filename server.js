@@ -16,13 +16,25 @@
   checkIfCat = require('./functions/myfunctions').checkIfCat,
   http,
   httpServer,
+  https = require('https'),
   path = require('path'),
-  fs = require('fs');
+  fs = require('fs'),
+  privateKey,
+  certificate,
+  credentials,
+  httpsServer;
 
 
-  http = require('http');
-  httpServer = http.createServer(app);
-  httpServer.listen(port);
+  // http = require('http');
+  // httpServer = http.createServer(app);
+  // httpServer.listen(port);
+  privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
+  certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
+  credentials = {key: privateKey, cert: certificate};
+  httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(port, function () {
+  });
+
 
   app.use('/assets', express.static(__dirname + '/public'));
   // app.use('/sis', express.static(__dirname + '/dist'));
