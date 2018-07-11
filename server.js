@@ -26,7 +26,7 @@
 
 
 
-app.all('*', ensureSecure);
+  app.all('*', ensureSecure);
 
   privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
   certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
