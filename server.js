@@ -14,7 +14,7 @@
   getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
-  http,
+  http = require('http'),
   httpServer,
   https = require('https'),
   path = require('path'),
@@ -35,14 +35,14 @@
   httpsServer.listen(port, function () {
   });
 
-  http = express.createServer();
-  http.get('*', function(req, res) {
+  httpServer = http.createServer();
+  httpServer.get('*', function(req, res) {
       res.redirect('https://' + req.headers.host + req.url);
 
       // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
       // res.redirect('https://example.com' + req.url);
   });
-  nttp.listen(3002);
+  httpServer.listen(3002);
 
 
 
