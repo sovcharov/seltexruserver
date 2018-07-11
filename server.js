@@ -4,7 +4,6 @@
 
   var express = require('express'),
   app = express(),
-  app2 = express(),
   mysql = require('mysql'),
   nodemailer = require('nodemailer'),
   mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
@@ -15,41 +14,15 @@
   getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
-  http = require('http'),
+  http,
   httpServer,
-  https = require('https'),
   path = require('path'),
-  fs = require('fs'),
-  privateKey,
-  certificate,
-  credentials,
-  httpsServer;
+  fs = require('fs');
 
 
-
-
-
-
-  privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
-  certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
-  credentials = {key: privateKey, cert: certificate};
-  httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(port, function () {
-  });
-
+  http = require('http');
   httpServer = http.createServer(app);
-  httpServer.listen(3002);
-  app2.get('*', function(req, res) {
-    console.log("HHHHH")
-
-      res.redirect('https://' + req.headers.host + req.url);
-
-      // Or, if you don't want to automatically detect the domain name from the request header, you can hard code it:
-      // res.redirect('https://example.com' + req.url);
-  });
-
-
-
+  httpServer.listen(port);
 
   app.use('/assets', express.static(__dirname + '/public'));
   // app.use('/sis', express.static(__dirname + '/dist'));
