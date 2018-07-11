@@ -26,22 +26,28 @@
 
 
 
-  app.get('*', function(req, res) {
-      res.redirect('https://www.seltex.ru' + req.url);
-  });
+app.all('*', ensureSecure);
 
   privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
   certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
   credentials = {key: privateKey, cert: certificate};
   httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(port, function () {
+  httpsServer.listen(3000, function () {
   });
 
   httpServer = http.createServer(app);
   httpServer.listen(3002);
 
 
-
+  function ensureSecure(req, res, next){
+    if(req.secure){
+      // OK, continue
+      return next();
+    };
+    // handle port numbers if you need non defaults
+    // res.redirect('https://' + req.host + req.url); // express 3.x
+    res.redirect('https://' + req.hostname + req.url); // express 4.x
+  }
 
 
   app.use('/assets', express.static(__dirname + '/public'));
