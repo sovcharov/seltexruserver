@@ -79,20 +79,25 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      var i = 0;
-      for(i = 0; i < rows.length; i += 1) {
-        if (i === 0) {
-          rows[0].allNumbersString = rows[0].number;
-          rows[0].allNumbers = [];
-          rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[0].number, manufacturer: rows[0].manufacturerFullName};
-        } else {
-          rows[0].allNumbersString = rows[0].allNumbersString + " " + rows[i].number;
-          rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[i].number, manufacturer: rows[i].manufacturerFullName};
+      if(rows){
+        var i = 0;
+        for(i = 0; i < rows.length; i += 1) {
+          if (i === 0) {
+            rows[0].allNumbersString = rows[0].number;
+            rows[0].allNumbers = [];
+            rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[0].number, manufacturer: rows[0].manufacturerFullName};
+          } else {
+            rows[0].allNumbersString = rows[0].allNumbersString + " " + rows[i].number;
+            rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[i].number, manufacturer: rows[i].manufacturerFullName};
 
+          }
         }
+        // console.log(imagesDir);
+        res.render('part', {part: rows[0]});
+      } else {
+        res.render('notfound', {description: 'Страницы не существует'});
       }
-      // console.log(imagesDir);
-      res.render('part', {part: rows[0]});
+
     });
 
     connection.end();
