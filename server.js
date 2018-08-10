@@ -79,7 +79,7 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      if(rows){
+      if(rows.length){
         var i = 0;
         for(i = 0; i < rows.length; i += 1) {
           if (i === 0) {
@@ -92,8 +92,8 @@
 
           }
         }
-        console.log(req.params.partId);
-        console.log(rows);
+        // console.log(req.params.partId);
+        // console.log(rows);
 
         res.render('part', {part: rows[0]});
       } else {
