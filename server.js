@@ -92,7 +92,9 @@
 
           }
         }
+        console.log(req.params.partId);
         console.log(rows);
+
         res.render('part', {part: rows[0]});
       } else {
         res.render('notfound', {description: 'Страницы не существует'});
