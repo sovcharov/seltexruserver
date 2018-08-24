@@ -107,7 +107,16 @@
       <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i></p>
       <p>Остаток на складе: <span><%= part.stock %></span> шт.</p>
       <% if (part.analogs.length) {%>
-        <p>Есть аналоги: </p>  
+        <p>Есть аналоги: </p>
+        <%
+          for (i=0; i < part.analogs.length; i += 1) {
+        %>
+
+        <p>
+          <p><%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: <%= part.analogs[i].stock %>, в пути: <%= part.analogs[i].ordered %></p>
+          <a href="/catalog/part/<%=part.analogs[i].id%>" class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">ПОСМОТРЕТЬ=></a>
+        </p>
+        <% } %>
       <% }%>
 
       <p>Скоро поступят на склад (в пути): <span><%= part.ordered %></span> шт.</p>

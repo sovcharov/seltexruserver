@@ -102,7 +102,7 @@
             if(err) {
               console.log(err)
             }
-            console.log(fields);
+            // console.log(fields);
             if(rows.length) {
               part.analogs = rows;
             } else {
