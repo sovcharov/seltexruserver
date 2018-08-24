@@ -103,7 +103,7 @@
 
   <div class="col-xs-12">
     <div  class="jumbotron my-part-description container">
-      <h1> <%= longDescription %> </h1>
+      <h1> <%= longDescription %> <%= part.test %></h1>
       <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i></p>
       <p>Остаток на складе: <span><%= part.stock %></span> шт.</p>
       <p>Скоро поступят на склад (в пути): <span><%= part.ordered %></span> шт.</p>
