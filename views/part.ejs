@@ -103,84 +103,9 @@
 
   <div class="col-xs-12">
     <div  class="jumbotron my-part-description container">
-      <h1> <%= longDescription part.analogs%> </h1>
+      <h1> <%= longDescription %> </h1>
       <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i></p>
       <p>Остаток на складе: <span><%= part.stock %></span> шт.</p>
-      <!-- <%if (part.analogs.length) {%>
-      <p>Аналоги:</p>
-      <section  class="">
-          <table class = "table table-condensed">
-              <tr><th class="">#</th><th>Наименование детали</th><th class="col-xs-1">Цена, <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th><th class="col-xs-1">На складе</th><th class="col-xs-1">В пути</th></tr>
-              <%
-                line = 0;
-                items = part.analogs
-                for (line; line < items.length; line += 1) {
-              %>
-                <tr>
-                  <td><%=line+1%></td>
-                  <td><%=items[line].description%>
-                    <a href="/catalog/part/<%=items[line].id%>" class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">ПОСМОТРЕТЬ=></a>
-                  </td>
-                  <%
-                    if(items[line].price) {
-                  %>
-                    <td><%=items[line].price%></td>
-                  <%
-                    } else {
-                  %>
-                    <td>-</td>
-                  <%
-                    };
-                  %>
-                  <%
-                    if(items[line].stock == 0) {
-                  %>
-                    <td><%=items[line].stock%></td>
-                  <%
-                  } else if(items[line].stock > 2) {
-                    if (items[line].stock > 12) {
-                      items[line].stock = "больше 12";
-                    }
-                  %>
-                  <td style="background-color:#B8FFDB"><%=items[line].stock%></td>
-                  <%
-                    } else {
-                  %>
-                  <td style="background-color:#ffc2b3"><%=items[line].stock%></td>
-                  <%
-                    };
-                  %>
-                  <%
-                    if(items[line].ordered == 0) {
-                  %>
-                    <td><%=items[line].ordered%></td>
-                  <%
-                  } else if(items[line].ordered > 2) {
-                    if (items[line].ordered > 12) {
-                      items[line].ordered = "больше 12";
-                    }
-                  %>
-                  <td style="background-color:#B8FFDB"><%=items[line].ordered%></td>
-                  <%
-                    } else {
-                  %>
-                  <td style="background-color:#ffc2b3"><%=items[line].ordered%></td>
-                  <%
-                    };
-                  %>
-                </tr>
-              <%
-                }
-              %>
-
-
-
-
-          </table>
-      </section>
-      <%
-        }
-      %> -->
       <p>Скоро поступят на склад (в пути): <span><%= part.ordered %></span> шт.</p>
       <p>Производитель: <span><%= part.manufacturerFullName %></span></p>
       <p>Основной номер: <span><%= part.allNumbers[0].number%></span></p>
