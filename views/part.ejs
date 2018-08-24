@@ -106,6 +106,10 @@
       <h1> <%= longDescription %> </h1>
       <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i></p>
       <p>Остаток на складе: <span><%= part.stock %></span> шт.</p>
+      <% if (part.analogs.length) {%>
+        <p>Есть аналоги: </p>  
+      <% }%>
+
       <p>Скоро поступят на склад (в пути): <span><%= part.ordered %></span> шт.</p>
       <p>Производитель: <span><%= part.manufacturerFullName %></span></p>
       <p>Основной номер: <span><%= part.allNumbers[0].number%></span></p>
