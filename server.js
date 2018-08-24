@@ -96,12 +96,15 @@
         // console.log(rows);
         query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by inventoryNumbers.main desc";
         // console.log(query);
-
-        connection.query(query, function (err, results, fields) {
-          console.log(results);
-          rows[0].analogs = [];
-          res.render('part', {part: rows[0]});
-          console.log(rows[0]);
+        var part = rows[0];
+        connection.query(query, function (err, rows, fields) {
+          if(err) {
+            console.log(err)
+          }
+          console.log(rows);
+          part.analogs = [];
+          res.render('part', {part: part});
+          // console.log(rows[0]);
         });
 
 
