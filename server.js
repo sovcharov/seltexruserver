@@ -106,7 +106,8 @@
           res.render('part', {part: part});
           // console.log(rows[0]);
         });
-
+        connection.end();
+        
 
         // res.render('part', {part: rows[0]});
       } else {
@@ -115,7 +116,6 @@
 
     });
 
-    connection.end();
 
   });
 
