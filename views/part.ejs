@@ -88,7 +88,7 @@
   <div id="top" class="navbar-space-catalog"></div>
   <div class="navbar-space-catalog"></div>
   <div class="navbar-space-catalog"></div>
-  <div class="navbar-space-catalog"></div>
+  <!-- <div class="navbar-space-catalog"></div> -->
 
 
   <%
@@ -108,7 +108,7 @@
 
       <p>Остаток на складе: <span><%= part.stock %></span> шт. Скоро поступят на склад (в пути): <span><%= part.ordered %></span> шт.</p>
       <% if (part.analogs.length) {%>
-        <p>Есть аналоги: </p>
+        <p style="color: red; font-weight:bold;">Есть аналоги: </p>
         <%
           for (i=0; i < part.analogs.length; i += 1) {
 
