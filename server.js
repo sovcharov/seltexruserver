@@ -98,6 +98,7 @@
 
         connection.query(query, function (err, results, fields) {
           rows[0].analogs = results;
+          rows[0].test = "qqq";
           res.render('part', {part: rows[0]});
           console.log(rows[0]);
         });
