@@ -122,7 +122,7 @@
         %>
 
 
-        <p> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: <span> <%= part.analogs[i].stock %> </span>, в пути: <span> <%= part.analogs[i].ordered %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">посмотреть=></a>
+        <p> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: <span> <%= part.analogs[i].stock %> </span>, в пути: <span> <%= part.analogs[i].ordered %> </span>, цена: <span> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">посмотреть=></a>
         </p>
         <% } %>
       <% }%>
