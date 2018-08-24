@@ -97,7 +97,7 @@
         query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = " + rows[0].allNumbers[0].number + " order by inventoryNumbers.main desc";
 
         connection.query(query, function (err, results, fields) {
-          rows[0].analogs = results;
+          rows[0].analogs = ['adf',1];
           rows[0].test = "qqq";
           res.render('part', {part: rows[0]});
           console.log(rows[0]);
