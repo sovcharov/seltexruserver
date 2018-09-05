@@ -104,48 +104,50 @@
   <div class="col-xs-12">
     <div  class="jumbotron my-part-description container">
       <h1> <%= longDescription %> </h1>
-      <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i> Производитель: <span><%= part.manufacturerFullName %></span></p>
+        <div style="font: 12px;">
+          <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i> Производитель: <span><%= part.manufacturerFullName %></span></p>
 
-      <p>Остаток на складе: Москва <span><%= part.msk %></span>, СПБ <span><%= part.stock %></span> Скоро поступят на склад (в пути): <span><%= part.ordered %></span></p>
-      <% if (part.analogs.length) {%>
-        <p style="color: red; font-weight:bold;">Есть аналоги: </p>
-        <%
-          for (i=0; i < part.analogs.length; i += 1) {
-
-
-            if (part.analogs[i].stock > 12) {
-              part.analogs[i].stock = "больше 12";
-            }
-            if (part.analogs[i].ordered > 12) {
-              part.analogs[i].ordered = "больше 12";
-            }
-            if (part.analogs[i].msk > 12) {
-              part.analogs[i].msk = "больше 12";
-            }
-        %>
-
-
-        <p> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">посмотреть=></a>
-        </p>
-        <% } %>
-      <% }%>
-      <p>Основной номер: <span><%= part.allNumbers[0].number%></span></p>
-      <p>Прочие номера:</p>
-        <%
-          for (i = 0; i < part.allNumbers.length; i += 1) {
-            %>
-              <p><%= part.allNumbers[i].number %> <%= part.allNumbers[i].manufacturer %></p>
+          <p>Остаток на складе: Москва <span><%= part.msk %></span>, СПБ <span><%= part.stock %></span> Скоро поступят на склад (в пути): <span><%= part.ordered %></span></p>
+          <% if (part.analogs.length) {%>
+            <p style="color: red; font-weight:bold;">Есть аналоги: </p>
             <%
-          }
-        %>
+              for (i=0; i < part.analogs.length; i += 1) {
 
 
-      <p>Вес, кг: <span><%= part.weight%></span></p>
-      <% if (part.image) { %>
-      <img src="/img/c15.jpg" alt="..." class="img-rounded my-part-image">
-      <% } else { %>
-      <img src="/img/nophoto.png" alt="Нет фотографии" class="img-responsive img-rounded  my-part-image">
-      <% } %>
+                if (part.analogs[i].stock > 12) {
+                  part.analogs[i].stock = "больше 12";
+                }
+                if (part.analogs[i].ordered > 12) {
+                  part.analogs[i].ordered = "больше 12";
+                }
+                if (part.analogs[i].msk > 12) {
+                  part.analogs[i].msk = "больше 12";
+                }
+            %>
+
+
+            <p> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">посмотреть=></a>
+            </p>
+            <% } %>
+          <% }%>
+          <p>Основной номер: <span><%= part.allNumbers[0].number%></span></p>
+          <p>Прочие номера:</p>
+            <%
+              for (i = 0; i < part.allNumbers.length; i += 1) {
+                %>
+                  <p><%= part.allNumbers[i].number %> <%= part.allNumbers[i].manufacturer %></p>
+                <%
+              }
+            %>
+
+
+          <p>Вес, кг: <span><%= part.weight%></span></p>
+          <% if (part.image) { %>
+          <img src="/img/c15.jpg" alt="..." class="img-rounded my-part-image">
+          <% } else { %>
+          <img src="/img/nophoto.png" alt="Нет фотографии" class="img-responsive img-rounded  my-part-image">
+          <% } %>
+      </div>
     </div>
   </div>
 
