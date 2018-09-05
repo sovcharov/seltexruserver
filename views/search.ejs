@@ -97,7 +97,7 @@
         </div>
         <section  class="">
             <table class = "table table-condensed">
-                <tr><th class="">#</th><th>Наименование детали</th><th class="col-xs-1">Цена, <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th><th class="col-xs-1">На складе</th><th class="col-xs-1">В пути</th></tr>
+                <tr><th class="">#</th><th>Наименование детали</th><th class="col-xs-1">Цена, <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th><th class="col-xs-1">Москва</th><th class="col-xs-1">СПБ</th><th class="col-xs-1">В пути</th></tr>
                 <%
                   line = 0;
                   for (line; line < length; line += 1) {
@@ -125,6 +125,26 @@
                     <%
                       };
                     %>
+
+                    <%
+                      if(items[line].msk == 0) {
+                    %>
+                      <td>0</td>
+                    <%
+                    } else if(items[line].msk > 2) {
+                      if (items[line].msk > 12) {
+                        items[line].msk = "больше 12";
+                      }
+                    %>
+                    <td style="background-color:#B8FFDB"><%=items[line].msk%></td>
+                    <%
+                      } else {
+                    %>
+                    <td style="background-color:#ffc2b3"><%=items[line].msk%></td>
+                    <%
+                      };
+                    %>
+
                     <%
                       if(items[line].stock == 0) {
                     %>
