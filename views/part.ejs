@@ -106,7 +106,7 @@
       <h1> <%= longDescription %> </h1>
       <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i> Производитель: <span><%= part.manufacturerFullName %></span></p>
 
-      <p>Остаток на складе: <span><%= part.stock %></span> шт. Скоро поступят на склад (в пути): <span><%= part.ordered %></span> шт.</p>
+      <p>Остаток на складе: Москва <span><%= part.msk %></span>, СПБ <span><%= part.stock %></span> Скоро поступят на склад (в пути): <span><%= part.ordered %></span></p>
       <% if (part.analogs.length) {%>
         <p style="color: red; font-weight:bold;">Есть аналоги: </p>
         <%
@@ -119,10 +119,13 @@
             if (part.analogs[i].ordered > 12) {
               part.analogs[i].ordered = "больше 12";
             }
+            if (part.analogs[i].msk > 12) {
+              part.analogs[i].msk = "больше 12";
+            }
         %>
 
 
-        <p> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">посмотреть=></a>
+        <p> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px;" title="Подробно" target="_blank">посмотреть=></a>
         </p>
         <% } %>
       <% }%>
