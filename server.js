@@ -151,6 +151,7 @@
       var n = req.url.indexOf("?part");
       if (n > -1) {
         search = req.url.substring(9,n);
+        req.params.search = search;
         search = search.replace(/\/|\\/g, " ");
         search = search.split(' ');
         search = getRidOfEmptyItems(search);
