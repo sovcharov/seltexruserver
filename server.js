@@ -149,6 +149,11 @@
 
     } else {
       var n = req.url.indexOf("?part");
+      if (n > -1) {
+        search = req.url.substring(9,n);
+        console.log(search);
+
+      }
 
       console.log(req.url+" "+n);
       query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link, p.msk as msk from inventory1s as p order by p.Description';
