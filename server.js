@@ -151,8 +151,8 @@
       var n = req.url.indexOf("?part");
       if (n > -1) {
         search = req.url.substring(9,n);
-        req.params.search = search;
         search = search.replace(/%20/g, " ");
+        req.params.search = search;
         search = search.split(' ');
         search = getRidOfEmptyItems(search);
         query = createComplicatedQuery(search);
