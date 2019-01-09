@@ -53,8 +53,8 @@
 
           <p>Остаток на складе: Москва <span><%= part.msk %></span>, СПБ <span><%= part.stock %></span> Скоро поступят на склад (в пути): <span><%= part.ordered %></span></p>
           <% if (part.analogs.length) {%>
-            <div style="border: 1px solid; padding: 5px;">
-            <p style="color: red;">Аналоги: </p>
+            <div style="border: 1px solid; padding: 10px; border-radius: 5px;">
+            <span style="color: red;">Аналоги: </span>
             <%
               for (i=0; i < part.analogs.length; i += 1) {
 
@@ -71,8 +71,8 @@
             %>
 
 
-            <p style="font-size:14px"> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px; font-weight: bold" title="Подробно" target="_blank">посмотреть=></a>
-            </p>
+            <span style="font-size:14px"> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px; font-weight: bold" title="Подробно" target="_blank">посмотреть=></a>
+            </span>
             <% } %>
           </div>
           <% }%>
