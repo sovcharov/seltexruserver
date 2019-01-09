@@ -76,11 +76,11 @@
             <% } %>
           </p>
           <% }%>
-          <p><b>Прочие номера:</b><br/>
+          <p>Прочие номера:<br/>
             <%
               for (i = 0; i < part.allNumbers.length; i += 1) {
                 %>
-                  <text><%= part.allNumbers[i].number %> <%= part.allNumbers[i].manufacturer %></text><br/>
+                  <text> - <%= part.allNumbers[i].number %> <%= part.allNumbers[i].manufacturer %></text><br/>
                 <%
               }
             %>
