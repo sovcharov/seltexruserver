@@ -48,7 +48,7 @@
 
   <div class="col-xs-12">
     <div  class="jumbotron my-part-description container">
-      <h1> <%= longDescription %> </h1>
+      <h1 style="font-size:15px;"> <%= longDescription %> </h1>
           <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:16px;"></i> Производитель: <span><%= part.manufacturerFullName %></span></p>
 
           <p>Остаток на складе: Москва <span><%= part.msk %></span>, СПБ <span><%= part.stock %></span> Скоро поступят на склад (в пути): <span><%= part.ordered %></span></p>
@@ -269,19 +269,6 @@
       // Enable map zooming with mouse scroll when the user clicks the map
       $('.map').on('click', onMapClickHandler);
       </script>
-      <!--Start of Tawk.to Script-->
-      <!-- <script type="text/javascript">
-      var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-      (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/57d69c113bec6867d943a729/default';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-      })();
-      </script> -->
-      <!--End of Tawk.to Script-->
 
       <!-- Yandex.Metrika counter -->
       <script type="text/javascript">
