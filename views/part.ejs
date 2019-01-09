@@ -51,7 +51,7 @@
       <h1> <%= longDescription %> </h1>
           <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:12px;"></i> Производитель: <span><%= part.manufacturerFullName %></span> Основной номер: <span><%= part.allNumbers[0].number%></span></p>
 
-          <p>Остаток на складе: Москва <span><%= part.msk %></span>, СПБ <span><%= part.stock %></span> Скоро поступят на склад (в пути): <span><%= part.ordered %></span></p>
+          <p>Остатки на складах: <br/>Москва <span><%= part.msk %></span><br/>СПБ <span><%= part.stock %></span><br/>Скоро поступят на склад (в пути): <span><%= part.ordered %></span></p>
           <% if (part.analogs.length) {%>
             <p style="background-color: #e2e5e2; padding: 5px; border-radius: 5px;">
             <text style="color: red;">Аналоги: </text><br/>
