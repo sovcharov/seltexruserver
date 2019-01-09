@@ -77,15 +77,16 @@
           </p>
           <% }%>
           <p>Прочие номера:</p>
+          <p>
             <%
               for (i = 0; i < part.allNumbers.length; i += 1) {
                 %>
-                  <p><%= part.allNumbers[i].number %> <%= part.allNumbers[i].manufacturer %></p>
+                  <text><%= part.allNumbers[i].number %> <%= part.allNumbers[i].manufacturer %></text><br/>
                 <%
               }
             %>
 
-
+          </p>
           <p>Вес, кг: <span><%= part.weight%></span></p>
           <% if (part.image) { %>
           <img src="/img/c15.jpg" alt="..." class="img-rounded my-part-image">
