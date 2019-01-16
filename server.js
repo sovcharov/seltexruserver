@@ -97,25 +97,25 @@
         // console.log(req.params.partId);
         // console.log(rows);
         part = rows[0];
-        if(part.manufacturerID === 5) {
-              var qty = 1,
-              partn = part.allNumbers[0].number,
-              myForm = {
-                format:'json',
-                acckey:myCTPConfig.acckey,
-                userid:myCTPConfig.userid,
-                passw:myCTPConfig.passw,
-                cust:myCTPConfig.cust,
-                // loc:'01', /commented to see all warehouses
-                partn:partn,
-                qty:qty || '1'};
-              request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
-                  if (err) {
-                  return console.error('upload failed:', err);
-                }
-                console.log(body);
-              })
-        }
+        // if(part.manufacturerID === 5) {
+        //       var qty = 1,
+        //       partn = part.allNumbers[0].number,
+        //       myForm = {
+        //         format:'json',
+        //         acckey:myCTPConfig.acckey,
+        //         userid:myCTPConfig.userid,
+        //         passw:myCTPConfig.passw,
+        //         cust:myCTPConfig.cust,
+        //         // loc:'01', /commented to see all warehouses
+        //         partn:partn,
+        //         qty:qty || '1'};
+        //       request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
+        //           if (err) {
+        //           return console.error('upload failed:', err);
+        //         }
+        //         console.log(body);
+        //       })
+        // }
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
