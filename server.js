@@ -73,7 +73,7 @@
 
   app.get('/catalog/part/:partId', function (req, res) {
 
-    var query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id = " + req.params.partId + " order by inventoryNumbers.main desc",
+    var query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id = " + req.params.partId + " order by inventoryNumbers.main desc",
     connection = mysql.createConnection(mysqlConnection);
 
     connection.connect();
@@ -95,6 +95,9 @@
         // console.log(req.params.partId);
         // console.log(rows);
         var part = rows[0];
+        if(part.manufacturerID === 5) {
+          console.log("manufacturer "+ part.manufacturerID);
+        }
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
