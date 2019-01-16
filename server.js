@@ -7,6 +7,7 @@
   mysql = require('mysql'),
   nodemailer = require('nodemailer'),
   mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
+  myCTPConfig = require(__dirname + '/../serverconfig/myctpconfig.js'),
   port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
   staticSitePath = require(__dirname + '/../serverconfig/nodeconfig.js').staticSitePath,
   emailAuth = require(__dirname + '/../serverconfig/nodeconfig.js').emailAuth,
@@ -19,6 +20,7 @@
   https = require('https'),
   path = require('path'),
   fs = require('fs'),
+  request = require('request'),
   privateKey,
   certificate,
   credentials,
@@ -32,8 +34,7 @@
   certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
   credentials = {key: privateKey, cert: certificate};
   httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(3000, function () {
-  });
+  httpsServer.listen(3000);
 
   httpServer = http.createServer(app);
   httpServer.listen(3002);
@@ -74,7 +75,8 @@
   app.get('/catalog/part/:partId', function (req, res) {
 
     var query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id = " + req.params.partId + " order by inventoryNumbers.main desc",
-    connection = mysql.createConnection(mysqlConnection);
+    connection = mysql.createConnection(mysqlConnection),
+    part;
 
     connection.connect();
 
@@ -94,16 +96,32 @@
         }
         // console.log(req.params.partId);
         // console.log(rows);
-        var part = rows[0];
+        part = rows[0];
         if(part.manufacturerID === 5) {
-          console.log("manufacturer "+ part.manufacturerID);
+              var qty = 1,
+              partn = part.allNumbers[0].number,
+              myForm = {
+                format:'json',
+                acckey:myCTPConfig.acckey,
+                userid:myCTPConfig.userid,
+                passw:myCTPConfig.passw,
+                cust:myCTPConfig.cust,
+                // loc:'01', /commented to see all warehouses
+                partn:partn,
+                qty:qty || '1'};
+              request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
+                  if (err) {
+                  return console.error('upload failed:', err);
+                }
+                console.log(body);
+              })
         }
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
           connection.query(query, function (err, rows, fields) {
             if(err) {
-              console.log(err)
+              console.log(err);
             }
             // console.log(fields);
             if(rows.length) {
@@ -139,8 +157,7 @@
     connection = mysql.createConnection(mysqlConnection),
     search = '',
     items = [],
-    currentId = 0,
-    resultIndex = 0;
+    n;
 
     //prepare sql query
     if (req.params.search) {
@@ -150,7 +167,7 @@
       query = createComplicatedQuery(search);
       query = connection.query(query);
     } else {
-      var n = req.url.indexOf("?part");
+      n = req.url.indexOf("?part");
       if (n > -1) {
         search = req.url.substring(9,n);
         search = search.replace(/%20/g, " ");
