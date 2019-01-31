@@ -28,16 +28,16 @@
 
 
 
-  // app.all('*', ensureSecure);
-  //
-  // privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
-  // certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
-  // credentials = {key: privateKey, cert: certificate};
-  // httpsServer = https.createServer(credentials, app);
-  // httpsServer.listen(3000);
+  app.all('*', ensureSecure);
 
-  httpServer = http.createServer(app);
-  httpServer.listen(3002);
+  privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
+  certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
+  credentials = {key: privateKey, cert: certificate};
+  httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(3000);
+
+  // httpServer = http.createServer(app);
+  // httpServer.listen(3002);
 
 
   function ensureSecure(req, res, next){
