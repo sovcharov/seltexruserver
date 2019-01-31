@@ -28,13 +28,13 @@
 
 
 
-  app.all('*', ensureSecure);
-
-  privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
-  certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
-  credentials = {key: privateKey, cert: certificate};
-  httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(3000);
+  // app.all('*', ensureSecure);
+  //
+  // privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
+  // certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
+  // credentials = {key: privateKey, cert: certificate};
+  // httpsServer = https.createServer(credentials, app);
+  // httpsServer.listen(3000);
 
   httpServer = http.createServer(app);
   httpServer.listen(3002);
@@ -214,34 +214,57 @@
   });
 
 
+  /////////////////////////////////////////////////////////////////////////////
+  //// send phone via email api
+  /////////////////////////////////////////////////////////////////////////////
+  //
+  // app.post('/api/sendmail/:phone', function (req, res) {
+  //   // create reusable transporter object using the default SMTP transport
+  //   var transporter = nodemailer.createTransport({
+  //     host: 'smtp.mail.ru',
+  //     port: 587,
+  //     secure: false, // secure:true for port 465, secure:false for port 587,
+  //     auth: emailAuth
+  //   }),
+  //
+  //   // setup email data with unicode symbols
+  //   mailOptions = {
+  //     from: '"SELTEX.RU" <sales2@seltex.ru>', // sender address
+  //     to: 'sales@seltex.com', // list of receivers
+  //     subject: 'Заказ звонка с сайта', // Subject line
+  //     text: 'Перезвонить на номер: ' + req.params.phone, // plain text body
+  //     html: '<h3>Перезвонить на номер: ' + req.params.phone + '</h3>' // html body
+  //   };
+  //
+  //   // send mail with defined transport object
+  //   transporter.sendMail(mailOptions, (error, info) => {
+  //     if (error) {
+  //       // return console.log(error);
+  //       res.send(false);
+  //     }
+  //     res.send('OK');
+  //     // console.log('Message %s sent: %s', info.messageId, info.response);
+  //   });
+  // });
 
-  app.post('/api/sendmail/:phone', function (req, res) {
-    // create reusable transporter object using the default SMTP transport
-    var transporter = nodemailer.createTransport({
-      host: 'smtp.mail.ru',
-      port: 587,
-      secure: false, // secure:true for port 465, secure:false for port 587,
-      auth: emailAuth
-    }),
-
-    // setup email data with unicode symbols
-    mailOptions = {
-      from: '"SELTEX.RU" <sales2@seltex.ru>', // sender address
-      to: 'sales@seltex.com', // list of receivers
-      subject: 'Заказ звонка с сайта', // Subject line
-      text: 'Перезвонить на номер: ' + req.params.phone, // plain text body
-      html: '<h3>Перезвонить на номер: ' + req.params.phone + '</h3>' // html body
-    };
-
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        // return console.log(error);
-        res.send(false);
+  app.get('/api/quotectp/:part', function (req, res) {
+    var qty = 1,
+    partn = req.params.part,
+    myForm = {
+      format:'json',
+      acckey:myCTPConfig.acckey,
+      userid:myCTPConfig.userid,
+      passw:myCTPConfig.passw,
+      cust:myCTPConfig.cust,
+      // loc:'01', /commented to see all warehouses
+      partn:partn,
+      qty:qty || '1'};
+    request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
+        if (err) {
+        return console.error('upload failed:', err);
       }
-      res.send('OK');
-      // console.log('Message %s sent: %s', info.messageId, info.response);
-    });
+      console.log(body);
+    })
   });
 
   app.get('/sis/*', function (req, res) {
