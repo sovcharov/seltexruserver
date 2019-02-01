@@ -17,6 +17,7 @@
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
   setCTPPriceRub = require(__dirname + '/../serverconfig/nodeconfig.js').setCTPPriceRub,
+  setCTPPriceSeaRub = require(__dirname + '/../serverconfig/nodeconfig.js').setCTPPriceSeaRub,
   http = require('http'),
   httpServer,
   https = require('https'),
@@ -261,10 +262,10 @@
       // console.log(body);
       var part = {};
       if (body.Locations.Location01) {
-        part.price = Number(body.Locations.Location01.CustPrice);
+        part.price = Number(body.Locations.Location01.CustPrice.replace(/,/g, ''));
         part.mia = parseInt(body.Locations.Location01.NetQtyStock);
       } else if (body.Locations.Location04) {
-        part.price = Number(body.Locations.Location04.CustPrice);
+        part.price = Number(body.Locations.Location04.CustPrice.replace(/,/g, ''));
         part.mia = 0;
       } else {
         part.price = 0;
@@ -278,24 +279,30 @@
         part.dal = 0;
       }
       if (body.dblWeigthKgs) {
-        part.weight = Number(body.dblWeigthKgs);
+        part.weight = Number(body.dblWeigthKgs.replace(/,/g, ''));
       }
-      console.log(part);
+      // console.log(part);
 
       part.totalQty = part.mia + part.dal;
       if(part.totalQty > 12) {
         part.totalQty = "больше 12"
       }
-      part.price = setCTPPriceRub(part.price, part.weight)//price count in rub
+      part.priceAvia = setCTPPriceRub(part.price, part.weight)//price count in rub
+      part.priceSea = setCTPPriceSeaRub(part.price, part.weight)//price count in rub
       if(part.totalQty) {
         part.leadTime = "2-3 недели";
+        part.leadTimeSea = "2-3 месяца";
+
       }
       part = {
-        price: part.price,
+        price: part.priceAvia,
+        priceSea: part.priceSea,
         qty: part.totalQty,
-        leadTime: part.leadTime
+        leadTime: part.leadTime,
+        leadTimeSea: part.leadTimeSea
+
       }
-      console.log(part);
+      // console.log(part);
 
 
       res.send(part);
