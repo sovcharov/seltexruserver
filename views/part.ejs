@@ -49,11 +49,28 @@
   <div class="col-xs-12">
     <div  class="jumbotron my-part-description container">
       <h1> <%= longDescription %> </h1>
-          <p>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:12px;"></i> Производитель: <span><%= part.manufacturerFullName %></span> Основной номер: <span><%= part.allNumbers[0].number%></span></p>
+          <div>Цена: <span><%= part.price %></span> <i class="fa fa-rub fa-fw" style="font-size:12px;"></i> Производитель: <span><%= part.manufacturerFullName %></span> Основной номер: <span id = "partNumber"><%=part.allNumbers[0].number%></span></div>
 
-          <p>Остатки на складах: Москва - <span><%= part.msk %></span>, СПБ - <span><%= part.stock %></span>, Транзит - <span><%= part.ordered %></span></p>
+          <div>Остатки на складах: Москва <span><%= part.msk %></span>, СПБ <span><%= part.stock %></span>, Транзит <span><%= part.ordered %></span></div>
+
+          <!-- CTP QUOTE -->
+          <% if (part.manufacturerID === 5) {%>
+            <div id = "quoteCTP">
+              Проверить на заказ из США:
+              <a class="btn btn-primary btn-xs" href="#" role="button" id = "quoteCTPButton" onclick = "quoteCTP('<%=part.allNumbers[0].number%>')">Проверить</a>
+              <i id="quoteCTPSpin" class="fa fa-cog fa-spin fa-1x fa-fw"></i>
+                            <span class="sr-only">Loading...</span>
+              <text id="quoteCTPInfo">
+                Цена: <span id="quoteCTPInfoPrice"></span>
+                Доступно: <span id="quoteCTPInfoQTY"></span>
+                Срок поставки: <span id="quoteCTPInfoTime"></span>
+              </text>
+            </div>
+          <% }%>
+          <!-- CTP QUOTE END -->
+
           <% if (part.analogs.length) {%>
-            <p style="background-color: #e2e5e2; padding: 5px; border-radius: 5px;">
+            <div style="background-color: #e2e5e2; padding: 5px; border-radius: 5px;">
             <text style="color: red;">Аналоги: </text><br/>
             <%
               for (i=0; i < part.analogs.length; i += 1) {
@@ -70,13 +87,13 @@
                 }
             %>
 
-
-            <text style=""> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a href="/catalog/part/<%=part.analogs[i].id%>" aria-hidden="true" style="color:#18BC9C; padding-left:10px; font-weight: bold">посмотреть=></a>
+            <text style=""> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span> <a class="btn btn-primary btn-xs" href="/catalog/part/<%=part.analogs[i].id%>" role="button" target = _blank>Посмотреть</a>
             </text><br/>
+
             <% } %>
-          </p>
+          </div>
           <% }%>
-          <p>Прочие номера:<br/>
+          <div>Прочие номера:<br/>
             <%
               for (i = 0; i < part.allNumbers.length; i += 1) {
                 %>
@@ -85,8 +102,8 @@
               }
             %>
 
-          </p>
-          <p>Вес, кг: <span><%= part.weight%></span></p>
+          </div>
+          <div>Вес, кг: <span><%= part.weight%></span></div>
           <% if (part.image) { %>
           <img src="/img/c15.jpg" alt="..." class="img-rounded my-part-image">
           <% } else { %>

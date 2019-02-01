@@ -12,9 +12,11 @@
   staticSitePath = require(__dirname + '/../serverconfig/nodeconfig.js').staticSitePath,
   emailAuth = require(__dirname + '/../serverconfig/nodeconfig.js').emailAuth,
   imagesDir = require(__dirname + '/../serverconfig/nodeconfig.js').imagesDir,
+  secure = require(__dirname + '/../serverconfig/nodeconfig.js').https,
   getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
   checkIfCat = require('./functions/myfunctions').checkIfCat,
+  setCTPPriceRub = require(__dirname + '/../serverconfig/nodeconfig.js').setCTPPriceRub,
   http = require('http'),
   httpServer,
   https = require('https'),
@@ -24,42 +26,34 @@
   privateKey,
   certificate,
   credentials,
-  httpsServer;
+  httpsServer,
+  ensureSecure;
 
-
-
-  app.all('*', ensureSecure);
-
-  privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
-  certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
-  credentials = {key: privateKey, cert: certificate};
-  httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(3000);
-
-  // httpServer = http.createServer(app);
-  // httpServer.listen(3002);
-
-
-  function ensureSecure(req, res, next){
-    if(req.secure){
-      // OK, continue
-      return next();
+  if (secure) {
+    privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
+    certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
+    credentials = {key: privateKey, cert: certificate};
+    httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(3000);
+    ensureSecure = function (req, res, next) {
+      if(req.secure){
+        // OK, continue
+        return next();
+      }
+      // handle port numbers if you need non defaults
+      // res.redirect('https://' + req.host + req.url); // express 3.x
+      res.redirect('https://' + req.hostname + req.url); // express 4.x
     };
-    // handle port numbers if you need non defaults
-    // res.redirect('https://' + req.host + req.url); // express 3.x
-    res.redirect('https://' + req.hostname + req.url); // express 4.x
+    app.all('*', ensureSecure);
+
+  } else {
+    httpServer = http.createServer(app);
+    httpServer.listen(3002);
   }
 
-
-  app.use('/assets', express.static(__dirname + '/public'));
-  // app.use('/sis', express.static(__dirname + '/dist'));
-  app.use('/', express.static(__dirname + staticSitePath));
-
-
-
-
   app.set('view engine', 'ejs');
-
+  app.use('/assets', express.static(__dirname + '/public'));
+  app.use('/', express.static(__dirname + staticSitePath));
   app.use(function (req, res, next) {
     var allowedOrigins = ['http://1.local', 'https://fvolchek.net', 'https://www.fvolchek.net', 'http://localhost:4200', 'http://seltex.ru', 'http://www.seltex.ru'],
     origin = req.headers.origin;
@@ -263,7 +257,30 @@
         if (err) {
         return console.error('upload failed:', err);
       }
-      console.log(body);
+      body = JSON.parse(body);
+      var part = {
+        price: Number(body.Locations.Location01.CustPrice) || 0,
+        mia: parseInt(body.Locations.Location01.NetQtyStock) || 0,
+        dal: parseInt(body.Locations.Location04.NetQtyStock) || 0,
+        weight: Number(body.dblWeigthKgs)
+      }
+      part.totalQty = part.mia + part.dal;
+      if(part.totalQty > 12) {
+        part.totalQty = "больше 12"
+      }
+      part.price = setCTPPriceRub(part.price, part.weight)//price count in rub
+      if(part.totalQty) {
+        part.leadTime = "2-3 недели";
+      }
+      part = {
+        price: part.price,
+        qty: part.totalQty,
+        leadTime: part.leadTime
+      }
+      console.log(part);
+
+
+      res.send(part);
     })
   });
 
