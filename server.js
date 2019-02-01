@@ -258,12 +258,30 @@
         return console.error('upload failed:', err);
       }
       body = JSON.parse(body);
-      var part = {
-        price: Number(body.Locations.Location01.CustPrice) || 0,
-        mia: parseInt(body.Locations.Location01.NetQtyStock) || 0,
-        dal: parseInt(body.Locations.Location04.NetQtyStock) || 0,
-        weight: Number(body.dblWeigthKgs)
+      // console.log(body);
+      var part = {};
+      if (body.Locations.Location01) {
+        part.price = Number(body.Locations.Location01.CustPrice);
+        part.mia = parseInt(body.Locations.Location01.NetQtyStock);
+      } else if (body.Locations.Location04) {
+        part.price = Number(body.Locations.Location04.CustPrice);
+        part.mia = 0;
+      } else {
+        part.price = 0;
+        part.mia = 0;
+        part.dal = 0;
+        part.weight = 0;
       }
+      if (body.Locations.Location04) {
+        part.dal = parseInt(body.Locations.Location01.NetQtyStock)
+      } else {
+        part.dal = 0;
+      }
+      if (body.dblWeigthKgs) {
+        part.weight = Number(body.dblWeigthKgs);
+      }
+      console.log(part);
+
       part.totalQty = part.mia + part.dal;
       if(part.totalQty > 12) {
         part.totalQty = "больше 12"
