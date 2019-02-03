@@ -31,11 +31,6 @@
   ensureSecure;
 
   if (secure) {
-    privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
-    certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
-    credentials = {key: privateKey, cert: certificate};
-    httpsServer = https.createServer(credentials, app);
-    httpsServer.listen(3000);
     ensureSecure = function (req, res, next) {
       if(req.secure){
         // OK, continue
@@ -46,7 +41,11 @@
       res.redirect('https://' + req.hostname + req.url); // express 4.x
     };
     app.all('*', ensureSecure);
-
+    privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
+    certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
+    credentials = {key: privateKey, cert: certificate};
+    httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(3000);
   } else {
     httpServer = http.createServer(app);
     httpServer.listen(3002);
