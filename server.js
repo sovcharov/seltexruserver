@@ -30,7 +30,7 @@
   httpsServer,
   ensureSecure;
 
-  if (secure) {
+  // if (secure) {
     ensureSecure = function (req, res, next) {
       if(req.secure){
         // OK, continue
@@ -46,14 +46,15 @@
     credentials = {key: privateKey, cert: certificate};
     httpsServer = https.createServer(credentials, app);
     httpsServer.listen(3000);
-  } else {
+  // } else {
     httpServer = http.createServer(app);
     httpServer.listen(3002);
-  }
+  // }
 
-  app.set('view engine', 'ejs');
   app.use('/assets', express.static(__dirname + '/public'));
   app.use('/', express.static(__dirname + staticSitePath));
+  app.set('view engine', 'ejs');
+
   app.use(function (req, res, next) {
     var allowedOrigins = ['http://1.local', 'https://fvolchek.net', 'https://www.fvolchek.net', 'http://localhost:4200', 'http://seltex.ru', 'http://www.seltex.ru'],
     origin = req.headers.origin;
