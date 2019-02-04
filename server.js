@@ -46,6 +46,7 @@
     credentials = {key: privateKey, cert: certificate};
     httpsServer = https.createServer(credentials, app);
     httpsServer.listen(3000);
+    //and here we run http anyway for redirect to work
     httpServer = http.createServer(app);
     httpServer.listen(3002);
   } else {
@@ -58,7 +59,7 @@
   app.set('view engine', 'ejs');
 
   app.use(function (req, res, next) {
-    var allowedOrigins = ['http://1.local', 'https://fvolchek.net', 'https://www.fvolchek.net', 'http://localhost:4200', 'http://seltex.ru', 'http://www.seltex.ru'],
+    var allowedOrigins = ['http://1.local', 'https://fvolchek.net', 'https://www.fvolchek.net', 'http://localhost:4200', 'http://seltex.ru', 'https://seltex.ru', 'https://www.seltex.ru', 'http://www.seltex.ru'],
     origin = req.headers.origin;
     if (allowedOrigins.indexOf(origin) > -1) {
       res.setHeader('Access-Control-Allow-Origin', origin);
