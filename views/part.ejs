@@ -3,14 +3,14 @@
 
 <head>
   <%
-    longDescription = part.description + " " + part.allNumbersString + " " + part.comment + " " + part.manufacturerFullName;
+    longDescription = part.description + " " + part.comment + " " + part.manufacturerFullName + " " + part.allNumbersString;
     title = longDescription;
     if (part.price !== 0) {
       title = title + " по цене " + part.price + " рублей"
     }
     title = title + " на сайте www.seltex.ru ДОСТАВКА ПО ВСЕЙ РОССИИ"
   %>
-  <title><%= title %></title>
+  <title><%=title%></title>
   <meta name="description" content="<%= title %>">
   <meta name="keywords" content="<%= title %>">
   <meta name="author" content="Seltex, Inc">
