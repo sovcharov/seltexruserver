@@ -194,7 +194,7 @@
             if(err) {
               console.log(err);
             }
-            console.log(rows);
+            // console.log(rows);
             if(rows.length) {
               part.analogs = rows;
             } else {
