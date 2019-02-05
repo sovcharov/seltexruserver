@@ -136,27 +136,108 @@
           res.render('part', {part: part});
           connection.end();
         }
-
-
-
         // res.render('part', {part: rows[0]});
       } else {
         res.render('notfound', {description: 'Страницы не существует'});
       }
+    });
+  });
 
+  app.get('/cat/:url', function (req, res) {
+
+    var query = "SELECT p.id from inventory as p where p.url = '" + req.params.url + "' limit 1",
+    connection = mysql.createConnection(mysqlConnection),
+    partID,
+    part;
+    connection.connect();
+
+    connection.query(query, function (err, rows, fields) {
+      if(rows){
+
+        partID = rows[0].id;
+        // console.log(partID);
+        query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.url = '" + req.params.url + "' order by inventoryNumbers.main desc limit 1";
+        connection = mysql.createConnection(mysqlConnection);
+
+        connection.connect();
+
+        connection.query(query, function (err, rows, fields) {
+          if(rows){
+            var i = 0;
+            for(i = 0; i < rows.length; i += 1) {
+              if (i === 0) {
+                rows[0].allNumbersString = rows[0].number;
+                rows[0].allNumbers = [];
+                rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[0].number, manufacturer: rows[0].manufacturerFullName};
+              } else {
+                rows[0].allNumbersString = rows[0].allNumbersString + " " + rows[i].number;
+                rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[i].number, manufacturer: rows[i].manufacturerFullName};
+
+              }
+            }
+            // console.log(req.params.partId);
+            // console.log(rows);
+            part = rows[0];
+            // if(part.manufacturerID === 5) {
+            //       var qty = 1,
+            //       partn = part.allNumbers[0].number,
+            //       myForm = {
+            //         format:'json',
+            //         acckey:myCTPConfig.acckey,
+            //         userid:myCTPConfig.userid,
+            //         passw:myCTPConfig.passw,
+            //         cust:myCTPConfig.cust,
+            //         // loc:'01', /commented to see all warehouses
+            //         partn:partn,
+            //         qty:qty || '1'};
+            //       request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
+            //           if (err) {
+            //           return console.error('upload failed:', err);
+            //         }
+            //         console.log(body);
+            //       })
+            // }
+            if(rows[0].allNumbers[0].number !== ""){
+              query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc limit 1";
+              // console.log(query);
+              connection.query(query, function (err, rows, fields) {
+                if(err) {
+                  console.log(err);
+                }
+                // console.log(fields);
+                if(rows.length) {
+                  part.analogs = rows;
+                } else {
+                  part.analogs = [];
+                }
+                res.render('part', {part: part});
+                // console.log(rows[0]);
+              });
+              connection.end();
+            } else {
+              part.analogs = [];
+              res.render('part', {part: part});
+              connection.end();
+            }
+            // res.render('part', {part: rows[0]});
+          } else {
+            res.render('notfound', {description: 'Страницы не существует'});
+          }
+        });
+      } else {
+        res.render('notfound', {description: 'Страницы не существует'});
+      }
     });
 
 
   });
 
   app.get(['/catalog/:search','/catalog/*'], function (req, res) {
-
     var query = '',
     connection = mysql.createConnection(mysqlConnection),
     search = '',
     items = [],
     n;
-
     //prepare sql query
     if (req.params.search) {
       search = req.params.search;
@@ -175,7 +256,7 @@
         query = createComplicatedQuery(search);
         query = connection.query(query);
       } else {
-        query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, p.link as link, p.msk as msk from inventory1s as p order by p.Description';
+        query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, inv.link as link, inv.url as url, p.msk as msk from inventory1s as p, inventory as inv where p.id = inv.id order by p.Description';
         // query = "SELECT inventoryDescription.description as description, p.id as id, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, inventoryNumbers.main as main, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where p.id = inventoryNumbers.inventoryId and p.id = inventoryDescription.id and p.id = inventoryComments.id and  inventoryManufacturers.id = inventoryNumbers.manufacturerId and p.Description not like N'яя%' order by p.description";
         query = connection.query(query);
       }
@@ -187,6 +268,7 @@
     query
     .on('result', function (row, index) {
       items[items.length] = row;
+      // console.log(row.url);
       // if(currentId !== row.id){
       //   currentId = row.id;
       //   resultIndex = items.length;

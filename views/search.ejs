@@ -55,7 +55,14 @@
                       <%
                         };
                       %>
-                      <a href="/catalog/part/<%=items[line].id%>" class="" title="Посмотреть подробно" target="_blank">Подробно</a>
+                      <%
+                        if(items[line].url) {
+                      %>
+                      <a class="btn btn-primary btn-xs" href="/cat/<%=items[line].url%>" role="button" target ="_blank">Подробно</a>
+                      <!-- <a href="/cat/<%=items[line].url%>" class="" title="Посмотреть подробно" target="_blank">Подробно</a> -->
+                      <%
+                        };
+                      %>
                     </td>
                     <%
                       if(items[line].price) {
