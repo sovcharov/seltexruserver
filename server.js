@@ -145,91 +145,75 @@
 
   app.get('/cat/:url', function (req, res) {
 
-    var query = "SELECT p.id from inventory as p where p.url = '" + req.params.url + "' limit 1",
+    var query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk, inventoryManufacturers.fullName from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.url = '" + req.params.url + "' order by inventoryNumbers.main desc",
     connection = mysql.createConnection(mysqlConnection),
-    partID,
     part;
+
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
       if(rows){
+        var i = 0;
+        for(i = 0; i < rows.length; i += 1) {
+          if (i === 0) {
+            rows[0].allNumbersString = rows[0].number;
+            rows[0].allNumbers = [];
+            rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[0].number, manufacturer: rows[0].manufacturerFullName};
+          } else {
+            rows[0].allNumbersString = rows[0].allNumbersString + " " + rows[i].number;
+            rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[i].number, manufacturer: rows[i].manufacturerFullName};
 
-        partID = rows[0].id;
-        // console.log(partID);
-        query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.url = '" + req.params.url + "' order by inventoryNumbers.main desc limit 1";
-        connection = mysql.createConnection(mysqlConnection);
-
-        connection.connect();
-
-        connection.query(query, function (err, rows, fields) {
-          if(rows){
-            var i = 0;
-            for(i = 0; i < rows.length; i += 1) {
-              if (i === 0) {
-                rows[0].allNumbersString = rows[0].number;
-                rows[0].allNumbers = [];
-                rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[0].number, manufacturer: rows[0].manufacturerFullName};
-              } else {
-                rows[0].allNumbersString = rows[0].allNumbersString + " " + rows[i].number;
-                rows[0].allNumbers[rows[0].allNumbers.length] = {number: rows[i].number, manufacturer: rows[i].manufacturerFullName};
-
-              }
+          }
+        }
+        // console.log(req.params.partId);
+        // console.log(rows);
+        part = rows[0];
+        // if(part.manufacturerID === 5) {
+        //       var qty = 1,
+        //       partn = part.allNumbers[0].number,
+        //       myForm = {
+        //         format:'json',
+        //         acckey:myCTPConfig.acckey,
+        //         userid:myCTPConfig.userid,
+        //         passw:myCTPConfig.passw,
+        //         cust:myCTPConfig.cust,
+        //         // loc:'01', /commented to see all warehouses
+        //         partn:partn,
+        //         qty:qty || '1'};
+        //       request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
+        //           if (err) {
+        //           return console.error('upload failed:', err);
+        //         }
+        //         console.log(body);
+        //       })
+        // }
+        if(rows[0].allNumbers[0].number !== ""){
+          query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
+          // console.log(query);
+          connection.query(query, function (err, rows, fields) {
+            if(err) {
+              console.log(err);
             }
-            // console.log(req.params.partId);
-            // console.log(rows);
-            part = rows[0];
-            // if(part.manufacturerID === 5) {
-            //       var qty = 1,
-            //       partn = part.allNumbers[0].number,
-            //       myForm = {
-            //         format:'json',
-            //         acckey:myCTPConfig.acckey,
-            //         userid:myCTPConfig.userid,
-            //         passw:myCTPConfig.passw,
-            //         cust:myCTPConfig.cust,
-            //         // loc:'01', /commented to see all warehouses
-            //         partn:partn,
-            //         qty:qty || '1'};
-            //       request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
-            //           if (err) {
-            //           return console.error('upload failed:', err);
-            //         }
-            //         console.log(body);
-            //       })
-            // }
-            if(rows[0].allNumbers[0].number !== ""){
-              query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc limit 1";
-              // console.log(query);
-              connection.query(query, function (err, rows, fields) {
-                if(err) {
-                  console.log(err);
-                }
-                // console.log(fields);
-                if(rows.length) {
-                  part.analogs = rows;
-                } else {
-                  part.analogs = [];
-                }
-                res.render('part', {part: part});
-                // console.log(rows[0]);
-              });
-              connection.end();
+            console.log(rows);
+            if(rows.length) {
+              part.analogs = rows;
             } else {
               part.analogs = [];
-              res.render('part', {part: part});
-              connection.end();
             }
-            // res.render('part', {part: rows[0]});
-          } else {
-            res.render('notfound', {description: 'Страницы не существует'});
-          }
-        });
+            res.render('part', {part: part});
+            // console.log(rows[0]);
+          });
+          connection.end();
+        } else {
+          part.analogs = [];
+          res.render('part', {part: part});
+          connection.end();
+        }
+        // res.render('part', {part: rows[0]});
       } else {
         res.render('notfound', {description: 'Страницы не существует'});
       }
     });
-
-
   });
 
   app.get(['/catalog/:search','/catalog/*'], function (req, res) {
