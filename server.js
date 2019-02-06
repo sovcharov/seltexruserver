@@ -241,7 +241,7 @@
       //   console.log(query);
       //   query = connection.query(query);
       // } else {
-        query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, inv.link as link, inv.url as url, p.msk as msk from inventory1s as p, inventory as inv where p.id = inv.id order by p.Description';
+        query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, inv.link as link, inv.url as url, p.msk as msk from inventory1s as p, inventory as inv where p.id = inv.id and (p.description like "%cat%" or p.description like "%prodiesel%" or p.description like "%cummins%")order by p.Description';
         // query = "SELECT inventoryDescription.description as description, p.id as id, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, inventoryNumbers.main as main, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where p.id = inventoryNumbers.inventoryId and p.id = inventoryDescription.id and p.id = inventoryComments.id and  inventoryManufacturers.id = inventoryNumbers.manufacturerId and p.Description not like N'яя%' order by p.description";
         query = connection.query(query);
       // }
