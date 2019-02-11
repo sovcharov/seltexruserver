@@ -79,7 +79,7 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      if(rows){
+      if(rows.length){
         var i = 0;
         for(i = 0; i < rows.length; i += 1) {
           if (i === 0) {
@@ -114,10 +114,10 @@
         //         console.log(body);
         //       })
         // }
-        if(!rows[0]) {
-          console.log(rows);
-          console.log(`PARAMETERS in PART: ${req.params.partId}`)
-        }
+        // if(!rows[0]) {
+        //   console.log(rows);
+        //   console.log(`PARAMETERS in PART: ${req.params.partId}`)
+        // }
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
@@ -156,7 +156,8 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      if(rows){
+      if(rows.length){
+        console.log(rows);
         var i = 0;
         for(i = 0; i < rows.length; i += 1) {
           if (i === 0) {
@@ -191,10 +192,10 @@
         //         console.log(body);
         //       })
         // }
-        if(!rows[0]) {
-          console.log(rows);
-          console.log(`PARAMETERS in NEW URL: ${req.params.url}`)
-        }
+        // if(!rows[0]) {
+        //   console.log(rows);
+        //   console.log(`PARAMETERS in NEW URL: ${req.params.url} ${req.params.url.length}`)
+        // }
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
@@ -226,6 +227,7 @@
 
   app.get(['/catalog/:search','/catalog/*'], function (req, res) {
     var query = '',
+    query2,
     connection = mysql.createConnection(mysqlConnection),
     search = '',
     items = [],
@@ -236,7 +238,7 @@
       search = search.split(' ');
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
-      query = connection.query(query);
+      query2 = connection.query(query);
     } else {
       // n = req.url.indexOf("?part");
       // if (n > -1) {
@@ -251,14 +253,19 @@
       // } else {
         query = 'SELECT p.ID as id, p.Description AS description, p.Price as price, p.Numbers AS numbers, p.stock as stock, p.ordered as ordered, inv.link as link, inv.url as url, p.msk as msk from inventory1s as p, inventory as inv where p.id = inv.id and (p.description like "%cat%" or p.description like "%prodiesel%" or p.description like "%cummins%")order by p.Description';
         // query = "SELECT inventoryDescription.description as description, p.id as id, inventoryComments.comment as comment, inventoryManufacturers.fullName as manufacturerFullName, inventoryNumbers.number as number, inventoryNumbers.main as main, p.Price as price, p.stock as stock, p.ordered as ordered, p.link as link from inventory as p, inventoryNumbers, inventoryManufacturers, inventoryDescription, inventoryComments where p.id = inventoryNumbers.inventoryId and p.id = inventoryDescription.id and p.id = inventoryComments.id and  inventoryManufacturers.id = inventoryNumbers.manufacturerId and p.Description not like N'яя%' order by p.description";
-        query = connection.query(query);
+        query2 = connection.query(query);
       // }
 
 
     }
 
 
-    query
+    query2
+    .on('error', function (err) {
+      console.log(err);
+      console.log(query);
+
+    })
     .on('result', function (row, index) {
       items[items.length] = row;
       // console.log(row.url);
