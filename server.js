@@ -132,7 +132,6 @@
 
     connection.query(query, function (err, rows, fields) {
       if(rows.length){
-        console.log(rows);
         var i = 0;
         for(i = 0; i < rows.length; i += 1) {
           if (i === 0) {
