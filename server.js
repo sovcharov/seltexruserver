@@ -114,6 +114,10 @@
         //         console.log(body);
         //       })
         // }
+        if(!rows[0]) {
+          console.log(rows);
+          console.log(`PARAMETERS in PART: ${req.params.partId}`)
+        }
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
@@ -187,6 +191,10 @@
         //         console.log(body);
         //       })
         // }
+        if(!rows[0]) {
+          console.log(rows);
+          console.log(`PARAMETERS in NEW URL: ${req.params.url}`)
+        }
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
