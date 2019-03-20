@@ -199,6 +199,9 @@
     //prepare sql query
     if (req.params.search) {
       search = req.params.search;
+      // console.log(req);
+      query = "call addLogSearch('"+req.ip+"','"+search+"')";
+      connection.query(query);
       search = search.split(' ');
       search = getRidOfEmptyItems(search);
       query = createComplicatedQuery(search);
