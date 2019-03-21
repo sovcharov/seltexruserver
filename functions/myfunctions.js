@@ -86,7 +86,31 @@
       str = str + ") and p.id = inv.id and p.description not like N'я%' order by p.Description";
 
       return str;
+    },
+
+    getCTPPart: function (arr) {
+      // return str.slice(0, str.length-4) + '-' + str.slice(str.length-4);
+
+      var checkIfCat = function (str) {
+        var regex = /^[A-Za-z0-9]{2,3}-?[0-9]{4}$/i;
+        if (regex.test(str)) {
+          return true;
+        }
+        return false;
+      },
+      i;
+
+      for (i = 0; i < arr.length; i += 1) {
+        if(checkIfCat(arr[i])) {
+          arr[i] = arr[i].replace("-","");
+          return arr[i];
+        }
+      }
+      return false;
     }
+
+
+
 
   };
 }());

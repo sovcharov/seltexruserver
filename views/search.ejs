@@ -38,6 +38,27 @@
               </div>
             </div>
         </div>
+        <%
+        if (specialOrder) {
+        %>
+        <div class="my-part-description">
+          <div class="col-lg-10 col-lg-offset-1 text-center">
+              <p class="text-muted" style="color:red">ДОСТУПНО НА ЗАКАЗ ИЗ США:
+              </p>
+          </div>
+          <table class = "table table-condensed">
+              <tr><th>Наименование детали</th><th class="col-xs-2">Доступно</th><th class="col-xs-2">Авиа 2-3 недели<i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th><th class="col-xs-2">Море 2-3 месяца</th></tr>
+              <tr>
+                <td><%=items.description%> Costex CTP</td>
+                <td><%=items.qty%> шт.</td>
+                <td><%=items.price%> <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></td>
+                <td><%=items.priceSea%> <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></td>
+              </tr>
+            </table>
+        </div>
+        <%
+        } else if (length) {
+        %>
         <section  class="">
             <table class = "table table-condensed">
                 <tr><th class="">#</th><th>Наименование детали</th><th class="col-xs-1">Цена, <i class="fa fa-rub fa-fw" style="font-size:12px;"></i></th><th class="col-xs-1">Москва</th><th class="col-xs-1">СПБ</th><th class="col-xs-1">В пути</th></tr>
@@ -141,6 +162,9 @@
 
             </table>
         </section>
+        <%
+          }
+        %>
     </div>
     <div class="tooltip">Hover over me
       <span class="tooltiptext">Tooltip text</span>
