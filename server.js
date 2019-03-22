@@ -75,22 +75,19 @@
 
     var query = "SELECT p.url from inventory as p where p.id = " + req.params.partId,
     connection = mysql.createConnection(mysqlConnection),
+    connection2,
+    connection3,
     part;
-
-    connection.connect();
 
     connection.query(query, function (err, rows, fields) {
       if (err) {
         res.render('notfound', {description: 'Ошибка базы данных'});
       } else if (rows && rows[0].url) {
         res.redirect(301, 'https://www.seltex.ru/cat/' + rows[0].url);
-        connection.end();
       } else {
         query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id = " + req.params.partId + " order by inventoryNumbers.main desc";
-
-        // connection.connect();
-
-        connection.query(query, function (err, rows, fields) {
+        connection2 = mysql.createConnection(mysqlConnection);
+        connection2.query(query, function (err, rows, fields) {
           if(rows.length){
             var i = 0;
             for(i = 0; i < rows.length; i += 1) {
@@ -108,7 +105,9 @@
             if(rows[0].allNumbers[0].number !== ""){
               query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + req.params.partId + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
               // console.log(query);
-              connection.query(query, function (err, rows, fields) {
+              connection3 = mysql.createConnection(mysqlConnection);
+
+              connection3.query(query, function (err, rows, fields) {
                 if(err) {
                   console.log(err);
                 }
@@ -121,28 +120,28 @@
                 res.render('part', {part: part});
                 // console.log(rows[0]);
               });
-              connection.end();
+              connection3.end();
             } else {
               part.analogs = [];
               res.render('part', {part: part});
-              connection.end();
             }
             // res.render('part', {part: rows[0]});
           } else {
             res.render('notfound', {description: 'Страницы не существует'});
           }
         });
+        connection2.end();
       }
     });
+    connection.end();
   });
 
   app.get('/cat/:url', function (req, res) {
 
     var query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk, inventoryManufacturers.fullName from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.url = '" + req.params.url + "' order by inventoryNumbers.main desc",
     connection = mysql.createConnection(mysqlConnection),
+    connection2,
     part;
-
-    connection.connect();
 
     connection.query(query, function (err, rows, fields) {
       if (err) {
@@ -168,7 +167,8 @@
         if(rows[0].allNumbers[0].number !== ""){
           query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
           // console.log(query);
-          connection.query(query, function (err, rows, fields) {
+          connection2 = mysql.createConnection(mysqlConnection);
+          connection2.query(query, function (err, rows, fields) {
             if(err) {
               console.log(err);
             }
@@ -181,16 +181,16 @@
             res.render('part', {part: part});
             // console.log(rows[0]);
           });
-          connection.end();
+          connection2.end();
         } else {
           part.analogs = [];
           res.render('part', {part: part});
-          connection.end();
         }
         // res.render('part', {part: rows[0]});
       } else {
         res.render('notfound', {description: 'Страницы не существует'});
       }
+      connection.end();
     });
   });
 
@@ -198,6 +198,7 @@
     var query = '',
     query2,
     connection = mysql.createConnection(mysqlConnection),
+    connection2,
     search = '',
     items = [],
     n,
@@ -329,42 +330,42 @@
               // console.log(part);
               if (part.qty){
                 // console.log(part);
-                connection = mysql.createConnection(mysqlConnection);
+                connection2 = mysql.createConnection(mysqlConnection);
                 query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP из США')";
-                connection.query(query);
-                connection.end();
+                connection2.query(query);
+                connection2.end();
                 res.render('search', {searchPhrase: req.params.search, items: part, length: 1, specialOrder: true});
 
               } else {
-                connection = mysql.createConnection(mysqlConnection);
+                connection2 = mysql.createConnection(mysqlConnection);
                 query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP, но нет остатков')";
-                connection.query(query);
-                connection.end();
+                connection2.query(query);
+                connection2.end();
                 res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
               }
             } else {
               // console.log(body);
-              connection = mysql.createConnection(mysqlConnection);
+              connection2 = mysql.createConnection(mysqlConnection);
               query = "call addLogSearch('"+req.ip+"','"+log+"','Есть з/ч похожие на CAT но CTP неверная з/ч')";
-              connection.query(query);
-              connection.end();
+              connection2.query(query);
+              connection2.end();
               res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
             }
 
           })
         } else {
-          connection = mysql.createConnection(mysqlConnection);
+          connection2 = mysql.createConnection(mysqlConnection);
           query = "call addLogSearch('"+req.ip+"','"+log+"','Ничего не найдено и нет з/ч CAT в запросе')";
-          connection.query(query);
-          connection.end();
+          connection2.query(query);
+          connection2.end();
 
           res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
         }
       } else {
-        connection = mysql.createConnection(mysqlConnection);
+        connection2 = mysql.createConnection(mysqlConnection);
         query = "call addLogSearch('"+req.ip+"','"+log+"','Найдено "+items.length+" позиций')";
-        connection.query(query);
-        connection.end();
+        connection2.query(query);
+        connection2.end();
         res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
       }
     });
