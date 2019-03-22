@@ -277,7 +277,7 @@
             body = JSON.parse(body);
             if (body.Locations) {
 
-              // console.log(body);
+              console.log(body);
               var part = {};
               if (body.Locations.Location01) {
                 part.price = Number(body.Locations.Location01.CustPrice.replace(/,/g, ''));
@@ -318,7 +318,9 @@
                 qty: part.totalQty,
                 leadTime: part.leadTime,
                 leadTimeSea: part.leadTimeSea,
-                description: body.strDescrip1
+                description: body.strDescrip1,
+                number: body.strPartNumber,
+                weight: body.dblWeigthKgs
               }
               // console.log(part);
               if (part.qty){
