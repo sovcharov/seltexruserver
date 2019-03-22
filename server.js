@@ -143,7 +143,9 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      if(rows.length){
+      if (err) {
+        res.render('notfound', {description: 'Ошибка базы данных'});
+      } else if (rows && rows.length) {
         var i = 0;
         for(i = 0; i < rows.length; i += 1) {
           if (i === 0) {
