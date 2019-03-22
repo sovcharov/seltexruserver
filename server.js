@@ -274,7 +274,7 @@
                 // return console.error('upload failed:', err);
                 console.log("error:: "+ err);
               }
-            body = JSON.parse(body);
+            // body = JSON.parse(body);
             if (body.Locations) {
 
               console.log(body);
@@ -327,14 +327,14 @@
                 // console.log(part);
                 query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP из США')";
                 connection.query(query);
-                connection.end();
+                // connection.end();
 
                 res.render('search', {searchPhrase: req.params.search, items: part, length: 1, specialOrder: true});
 
               } else {
                 query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP, но нет остатков')";
                 connection.query(query);
-                connection.end();
+                // connection.end();
 
                 res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
               }
@@ -342,7 +342,7 @@
               // console.log(body);
               query = "call addLogSearch('"+req.ip+"','"+log+"','Есть з/ч похожие на CAT но CTP неверная з/ч')";
               connection.query(query);
-              connection.end();
+              // connection.end();
 
               res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
             }
@@ -351,20 +351,20 @@
         } else {
           query = "call addLogSearch('"+req.ip+"','"+log+"','Ничего не найдено и нет з/ч CAT в запросе')";
           connection.query(query);
-          connection.end();
+          // connection.end();
 
           res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
         }
       } else {
         query = "call addLogSearch('"+req.ip+"','"+log+"','Найдено "+items.length+" позиций')";
         connection.query(query);
-        connection.end();
+        // connection.end();
 
         res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
       }
     });
 
-    // connection.end();
+    connection.end();
 
   });
 
