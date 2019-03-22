@@ -276,10 +276,10 @@
                 // return console.error('upload failed:', err);
                 console.log("error:: "+ err);
               }
-            // body = JSON.parse(body);
+            body = JSON.parse(body);
             if (body.Locations) {
 
-              console.log(body);
+              // console.log(body);
               var part = {};
               if (body.Locations.Location01) {
                 part.price = Number(body.Locations.Location01.CustPrice.replace(/,/g, ''));
@@ -294,7 +294,7 @@
                 part.weight = 0;
               }
               if (body.Locations.Location04) {
-                part.dal = parseInt(body.Locations.Location01.NetQtyStock)
+                part.dal = parseInt(body.Locations.Location04.NetQtyStock)
               } else {
                 part.dal = 0;
               }
@@ -327,45 +327,45 @@
               // console.log(part);
               if (part.qty){
                 // console.log(part);
+                connection = mysql.createConnection(mysqlConnection);
                 query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP из США')";
                 connection.query(query);
-                // connection.end();
-
+                connection.end();
                 res.render('search', {searchPhrase: req.params.search, items: part, length: 1, specialOrder: true});
 
               } else {
+                connection = mysql.createConnection(mysqlConnection);
                 query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP, но нет остатков')";
                 connection.query(query);
-                // connection.end();
-
+                connection.end();
                 res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
               }
             } else {
               // console.log(body);
+              connection = mysql.createConnection(mysqlConnection);
               query = "call addLogSearch('"+req.ip+"','"+log+"','Есть з/ч похожие на CAT но CTP неверная з/ч')";
               connection.query(query);
-              // connection.end();
-
+              connection.end();
               res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
             }
 
           })
         } else {
+          connection = mysql.createConnection(mysqlConnection);
           query = "call addLogSearch('"+req.ip+"','"+log+"','Ничего не найдено и нет з/ч CAT в запросе')";
           connection.query(query);
-          // connection.end();
+          connection.end();
 
           res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
         }
       } else {
+        connection = mysql.createConnection(mysqlConnection);
         query = "call addLogSearch('"+req.ip+"','"+log+"','Найдено "+items.length+" позиций')";
         connection.query(query);
-        // connection.end();
-
+        connection.end();
         res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
       }
     });
-
     connection.end();
 
   });
@@ -436,7 +436,7 @@
         part.weight = 0;
       }
       if (body.Locations.Location04) {
-        part.dal = parseInt(body.Locations.Location01.NetQtyStock)
+        part.dal = parseInt(body.Locations.Location04.NetQtyStock)
       } else {
         part.dal = 0;
       }
