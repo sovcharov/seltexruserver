@@ -80,7 +80,9 @@
     connection.connect();
 
     connection.query(query, function (err, rows, fields) {
-      if(rows[0].url){
+      if (err) {
+        res.render('notfound', {description: 'Ошибка базы данных'});
+      } else if (rows && rows[0].url) {
         res.redirect(301, 'https://www.seltex.ru/cat/' + rows[0].url);
         connection.end();
       } else {
