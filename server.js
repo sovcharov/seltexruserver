@@ -275,81 +275,89 @@
             partn:partn,
             qty:qty || '1'};
           request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
-              if (err) {
-                // return console.error('upload failed:', err);
-                console.log("error:: "+ err);
-              }
-            body = JSON.parse(body);
-            if (body.Locations) {
+            if (err) {
+              // return console.error('upload failed:', err);
+              // console.log("error:: "+ err);
+              // console.log("httpResponse:: "+ httpResponse);
+              connection2 = mysql.createConnection(mysqlConnection);
+              query = "call addLogSearch('"+req.ip+"','"+log+"','CTP сервер не отвечает')";
+              connection2.query(query);
+              connection2.end();
+              res.render('search', {searchPhrase: req.params.search, items: [], length: 0, specialOrder: false});
 
-              // console.log(body);
-              var part = {};
-              if (body.Locations.Location01) {
-                part.price = Number(body.Locations.Location01.CustPrice.replace(/,/g, ''));
-                part.mia = parseInt(body.Locations.Location01.NetQtyStock);
-              } else if (body.Locations.Location04) {
-                part.price = Number(body.Locations.Location04.CustPrice.replace(/,/g, ''));
-                part.mia = 0;
-              } else {
-                part.price = 0;
-                part.mia = 0;
-                part.dal = 0;
-                part.weight = 0;
-              }
-              if (body.Locations.Location04) {
-                part.dal = parseInt(body.Locations.Location04.NetQtyStock)
-              } else {
-                part.dal = 0;
-              }
-              if (body.dblWeigthKgs) {
-                part.weight = Number(body.dblWeigthKgs.replace(/,/g, ''));
-              }
-              // console.log(part);
+            } else {
+              body = JSON.parse(body);
+              if (body.Locations) {
 
-              part.totalQty = part.mia + part.dal;
-              if(part.totalQty > 12) {
-                part.totalQty = "больше 12"
-              }
-              part.priceAvia = setCTPPriceRub(part.price, part.weight)//price count in rub
-              part.priceSea = setCTPPriceSeaRub(part.price, part.weight)//price count in rub
-              if(part.totalQty) {
-                part.leadTime = "2-3 недели";
-                part.leadTimeSea = "2-3 месяца";
-
-              }
-              part = {
-                price: part.priceAvia,
-                priceSea: part.priceSea,
-                qty: part.totalQty,
-                leadTime: part.leadTime,
-                leadTimeSea: part.leadTimeSea,
-                description: body.strDescrip1,
-                number: body.strPartNumber,
-                weight: body.dblWeigthKgs
-              }
-              // console.log(part);
-              if (part.qty){
+                // console.log(body);
+                var part = {};
+                if (body.Locations.Location01) {
+                  part.price = Number(body.Locations.Location01.CustPrice.replace(/,/g, ''));
+                  part.mia = parseInt(body.Locations.Location01.NetQtyStock);
+                } else if (body.Locations.Location04) {
+                  part.price = Number(body.Locations.Location04.CustPrice.replace(/,/g, ''));
+                  part.mia = 0;
+                } else {
+                  part.price = 0;
+                  part.mia = 0;
+                  part.dal = 0;
+                  part.weight = 0;
+                }
+                if (body.Locations.Location04) {
+                  part.dal = parseInt(body.Locations.Location04.NetQtyStock)
+                } else {
+                  part.dal = 0;
+                }
+                if (body.dblWeigthKgs) {
+                  part.weight = Number(body.dblWeigthKgs.replace(/,/g, ''));
+                }
                 // console.log(part);
-                connection2 = mysql.createConnection(mysqlConnection);
-                query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP из США')";
-                connection2.query(query);
-                connection2.end();
-                res.render('search', {searchPhrase: req.params.search, items: part, length: 1, specialOrder: true});
 
+                part.totalQty = part.mia + part.dal;
+                if(part.totalQty > 12) {
+                  part.totalQty = "больше 12"
+                }
+                part.priceAvia = setCTPPriceRub(part.price, part.weight)//price count in rub
+                part.priceSea = setCTPPriceSeaRub(part.price, part.weight)//price count in rub
+                if(part.totalQty) {
+                  part.leadTime = "2-3 недели";
+                  part.leadTimeSea = "2-3 месяца";
+
+                }
+                part = {
+                  price: part.priceAvia,
+                  priceSea: part.priceSea,
+                  qty: part.totalQty,
+                  leadTime: part.leadTime,
+                  leadTimeSea: part.leadTimeSea,
+                  description: body.strDescrip1,
+                  number: body.strPartNumber,
+                  weight: body.dblWeigthKgs
+                }
+                // console.log(part);
+                if (part.qty){
+                  // console.log(part);
+                  connection2 = mysql.createConnection(mysqlConnection);
+                  query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP из США')";
+                  connection2.query(query);
+                  connection2.end();
+                  res.render('search', {searchPhrase: req.params.search, items: part, length: 1, specialOrder: true});
+
+                } else {
+                  connection2 = mysql.createConnection(mysqlConnection);
+                  query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP, но нет остатков')";
+                  connection2.query(query);
+                  connection2.end();
+                  res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
+                }
               } else {
+                // console.log(body);
                 connection2 = mysql.createConnection(mysqlConnection);
-                query = "call addLogSearch('"+req.ip+"','"+log+"','На Заказ CTP, но нет остатков')";
+                query = "call addLogSearch('"+req.ip+"','"+log+"','Есть з/ч похожие на CAT но CTP неверная з/ч')";
                 connection2.query(query);
                 connection2.end();
                 res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
               }
-            } else {
-              // console.log(body);
-              connection2 = mysql.createConnection(mysqlConnection);
-              query = "call addLogSearch('"+req.ip+"','"+log+"','Есть з/ч похожие на CAT но CTP неверная з/ч')";
-              connection2.query(query);
-              connection2.end();
-              res.render('search', {searchPhrase: req.params.search, items: items, length: items.length, specialOrder: false});
             }
 
           })
