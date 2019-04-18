@@ -273,7 +273,18 @@
             cust:myCTPConfig.cust,
             // loc:'01', /commented to see all warehouses
             partn:partn,
-            qty:qty || '1'};
+            qty:qty || '1'},
+          tooLongReq = false;
+          // this timout needs in case ctp server too slow
+          setTimeout(function(){
+            console.log("time out");
+            tooLongReq = true;
+            connection2 = mysql.createConnection(mysqlConnection);
+            query = "call addLogSearch('"+req.ip+"','"+log+"','CTP server отвечает слишком долго')";
+            connection2.query(query);
+            connection2.end();
+            res.render('search', {searchPhrase: req.params.search, items: [], length: 0, specialOrder: false});
+          }, 8000);
           request.post({url:'https://dev.costex.com:10443/WebServices/costex/partService/partController.php', form:myForm}, function(err, httpResponse, body){
             if (err) {
               // return console.error('upload failed:', err);
@@ -285,7 +296,7 @@
               connection2.end();
               res.render('search', {searchPhrase: req.params.search, items: [], length: 0, specialOrder: false});
 
-            } else {
+            } else if (!tooLongReq) {
               body = JSON.parse(body);
               if (body.Locations) {
 
