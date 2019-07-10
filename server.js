@@ -275,7 +275,7 @@
             partn:partn,
             qty:qty || '1'},
           tooLongReq = false;
-          // this timout needs in case ctp server too slow
+          // this timeout needs in case ctp server too slow
           setTimeout(function(){
             console.log("time out");
             tooLongReq = true;
@@ -295,7 +295,6 @@
               connection2.query(query);
               connection2.end();
               res.render('search', {searchPhrase: req.params.search, items: [], length: 0, specialOrder: false});
-
             } else if (!tooLongReq) {
               body = JSON.parse(body);
               if (body.Locations) {
