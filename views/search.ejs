@@ -17,63 +17,7 @@
 </head>
 
 <body>
-  <link rel="stylesheet" href="font-awesome/css/all.css">
-
-  <nav class="navbar-inverse my-navbar navbar-fixed-top">
-      <div class="">
-          <div class="col-sm-3 navbar-header" style = "padding: 0px">
-            <span class="navbar-brand" style="width:318px; font-size:11px; ; padding-left:3px; text-align:left;font-family: Arial black;">
-              <span style="position:relative; top:-3px;"><img src="/img/seltexLogoTranspYellow.png" width="110" height="24" class="" alt="Seltex" ></span> ВСЁ ДЛЯ ДВИГАТЕЛЕЙ CAT®
-
-            </span>
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-              <!--                <div class="my-logo" href="#top"><img src="img/seltexLogoTranspYellow.png" height="40" width="170"></div>-->
-          </div>
-
-
-          <!-- /.navbar-collapse -->
-          <form class="col-sm-3 navbar-form navbar-right" role="search" style="" onsubmit="this.action='/catalog/'+this.part.value;" method="get">
-              <div class="input-group" style="margin-right:5px;">
-                  <input type="text" class="form-control" placeholder="Поиск в каталоге" name="part">
-                  <span class="input-group-btn">
-                      <button class="btn btn-warning my-search-button" type="submit">Поиск</button>
-                  </span>
-              </div>
-          </form>
-
-          <div class="collapse navbar-collapse col-sm-3 navbar-right" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                  <li><a href="#about">О компании</a></li>
-                  <li><a href="/catalog/">Каталог</a></li>
-                  <li style=""><a href="#contact" class="contact-button">Контакты</a></li>
-              </ul>
-          </div>
-      </div>
-      <div class="" style="clear: both">
-        <div class="col-sm-3" style="text-align:center;font-size:14px; font-family: Arial black;color: #ce8a2b;">(499) 288-07-10 <span style="font-size:12px; color: #9d9d9d; font-family: arial;">Москва</span>
-        </div>
-        <div class="col-sm-3" style="text-align:center;font-size:14px; font-family: Arial black;color: #ce8a2b;">(812) 320-52-10 <span style="font-size:12px; color: #9d9d9d; font-family: arial;">Санкт-Петербург</span>
-        </div>
-        <div class="col-sm-3" style="text-align:center;font-size:14px; font-family: Arial black;color: #ce8a2b;">8-800-550-52-10 <span style="font-size:12px; color: #9d9d9d; font-family: arial;">Бесплатный по России</span>
-        </div>
-        <div class="col-sm-3" style="text-align:center;font-size:14px; font-family: Arial;color: #18BC9C; padding-bottom:2px;"><a href="mailto:sales@seltex.ru" style="text-align:center;font-size:14px; font-family: Arial;color: #ce8a2b; padding-bottom:2px;"> <i class="far fa-envelope" style="color: #18BC9C"></i>  sales@seltex.ru</a>
-        <a style="font-size: 14px;" href="https://vk.com/club5567084" class="fab fa-vk"></a>
-        <a style="font-size: 14px;" href="https://www.instagram.com/seltex.ru" class="fab fa-instagram"></a>
-        </div>
-        <!-- <div class="col-sm-3" style="text-align:center; font-size:18px;">
-            <a href="mailto:sales@seltex.ru"> <i class="fa fa-envelope-o fa-fw"></i>  sales@seltex.ru</a>
-        </div> -->
-      </div>
-      <!-- /.container-fluid -->
-  </nav>
-
-  <div id="top" class="navbar-space"></div>
-  <div id="top" class="navbar-space visible-xs"></div>
+  <div id="header"></div>
 
 
     <div id="top" class="navbar-space-catalog"></div>
@@ -406,7 +350,7 @@
 
 <!-- Custom Theme JavaScript -->
 <script>
-// $("#header").load("/templates/header.html");
+$("#header").load("/templates/header.html");
 // $("#footer").load("/templates/footer.html");
 // Scrolls to the selected menu item on the page
 $(function () {
