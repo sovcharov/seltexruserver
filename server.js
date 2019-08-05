@@ -442,7 +442,7 @@
         return console.error('upload failed:', err);
       }
       body = JSON.parse(body);
-      // console.log(body);
+      // console.log("BODY:", body);
       var part = {};
       if (body.Locations.Location01) {
         part.price = Number(body.Locations.Location01.CustPrice.replace(/,/g, ''));
@@ -475,7 +475,6 @@
       if(part.totalQty) {
         part.leadTime = "2-3 недели";
         part.leadTimeSea = "2-3 месяца";
-
       }
       part = {
         price: part.priceAvia,
@@ -483,7 +482,6 @@
         qty: part.totalQty,
         leadTime: part.leadTime,
         leadTimeSea: part.leadTimeSea
-
       }
       // console.log(part);
 
