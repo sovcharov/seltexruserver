@@ -57,7 +57,7 @@
     httpServer.listen(3002);
   }
 
-  app.use('/assets', express.static(__dirname + '/public'));
+  // app.use('/assets', express.static(__dirname + '/public'));
   app.use('/', express.static(__dirname + staticSitePath));
   app.set('view engine', 'ejs');
 
