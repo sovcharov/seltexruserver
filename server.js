@@ -31,6 +31,7 @@
   httpsServer,
   ensureSecure;
   console.log(staticSitePath);
+  secure = false;
 
   if (secure) {
     ensureSecure = function (req, res, next) {
