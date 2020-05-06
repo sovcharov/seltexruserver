@@ -30,6 +30,7 @@
   credentials,
   httpsServer,
   ensureSecure;
+  console.log(staticSitePath);
 
   if (secure) {
     ensureSecure = function (req, res, next) {
