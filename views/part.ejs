@@ -48,21 +48,28 @@
   <div class="col-xs-12">
     <div  class="jumbotron my-part-description container">
       <h1> <%= longDescription %> </h1>
-          <div>Цена: <span style="color: red; font-size: 24px"><%= part.price %></span> <i class="fas fa-ruble-sign" style="font-size:12px;"></i> Производитель: <span><%= part.manufacturerFullName %></span> Основной номер: <span id = "partNumber"><%=part.allNumbers[0].number%></span></div>
+          <div>Цена:
+            <% if (part.price) { %>
+              <span style="color: red; font-size: 24px"><%= part.price %></span>
+              <i class="fas fa-ruble-sign" style="font-size:12px;"></i>
+            <% } else { %>
+              <span style="">По запросу</span>
+            <% } %>
+            Производитель: <span><%= part.manufacturerFullName %></span> Основной номер: <span id = "partNumber"><%=part.allNumbers[0].number%></span></div>
 
-          <div>Остатки на складах: Москва
+          <div>Остатки на складах: Москва:
             <% if (part.msk) { %>
                 <span style = "color: red; font-size: 20px"><%= part.msk %></span>
             <% } else { %>
                 <span><%= part.msk %></span>
             <% } %>
-            , СПБ
+            , Санкт-Петербург:
             <% if (part.stock) { %>
                 <span style = "color: red; font-size: 20px"><%= part.stock %></span>
             <% } else { %>
                 <span><%= part.stock %></span>
             <% } %>
-            , Транзит
+            , Транзит:
             <% if (part.ordered) { %>
                 <span style = "color: red; font-size: 20px"><%= part.ordered %></span>
             <% } else { %>
@@ -112,19 +119,19 @@
                 }
             %>
 
-            <text style=""> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> (Производитель: <span><%= part.analogs[i].fullName %></span>) остаток: МСК
+            <text style=""> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> (Производитель: <span><%= part.analogs[i].fullName %></span>) остаток: МСК:
               <% if (part.analogs[i].msk) { %>
                   <span style = "color: red;"><%= part.analogs[i].msk %></span>
               <% } else { %>
                   <span><%= part.analogs[i].msk %></span>
               <% } %>
-              , СПБ
+              , СПБ:
               <% if (part.analogs[i].stock) { %>
                   <span style = "color: red;"><%= part.analogs[i].stock %></span>
               <% } else { %>
                   <span><%= part.analogs[i].stock %></span>
               <% } %>
-              , в пути:
+              , Транзит:
               <% if (part.analogs[i].ordered) { %>
                   <span style = "color: red;"><%= part.analogs[i].ordered %></span>
               <% } else { %>
@@ -132,7 +139,13 @@
               <% } %>
 
 
-              , цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span><i class="fas fa-ruble-sign" style="font-size:12px;"></i>
+              , цена:
+              <% if (part.analogs[i].price) { %>
+                <span style="color: #f48342"> <%= part.analogs[i].price %> </span><i class="fas fa-ruble-sign" style="font-size:12px;"></i>
+              <% } else { %>
+                <span style="">По запросу</span>
+              <% } %>
+
               <% if (part.analogs[i].url) { %>
                 <a class="btn btn-primary btn-xs" href="/cat/<%=part.analogs[i].url%>" title="Посмотреть <%=part.analogs[i].description%> <%=part.analogs[i].comment%>" target ="_blank">Посмотреть</a>
               <% } else { %>
