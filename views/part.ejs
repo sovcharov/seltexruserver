@@ -93,7 +93,7 @@
                 }
             %>
 
-            <text style=""> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span>
+            <text style=""> - <%= part.analogs[i].description %>  <%= part.analogs[i].comment %> (Производитель: <%= part.analogs[i].fullName %>) остаток: МСК <span style="color: #f48342"> <%= part.analogs[i].msk %> </span>, СПБ <span style="color: #f48342"> <%= part.analogs[i].stock %> </span>, в пути: <span style="color: #f48342"> <%= part.analogs[i].ordered %> </span>, цена: <span style="color: #f48342"> <%= part.analogs[i].price %> </span>
               <% if (part.analogs[i].url) { %>
                 <a class="btn btn-primary btn-xs" href="/cat/<%=part.analogs[i].url%>" title="Посмотреть <%=part.analogs[i].description%> <%=part.analogs[i].comment%>" target ="_blank">Посмотреть</a>
               <% } else { %>

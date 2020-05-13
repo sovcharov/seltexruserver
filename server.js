@@ -166,14 +166,14 @@
         //   console.log(`PARAMETERS in NEW URL: ${req.params.url} ${req.params.url.length}`)
         // }
         if(rows[0].allNumbers[0].number !== ""){
-          query = "SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc";
+          query = "select * from (SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc) as pp, inventoryManufacturers as mm, inventoryNumbers as nn where pp.id = nn.inventoryId and nn.manufacturerID = mm.id and nn.main = '1'";
           // console.log(query);
           connection2 = mysql.createConnection(mysqlConnection);
           connection2.query(query, function (err, rows, fields) {
             if(err) {
               console.log(err);
             }
-            // console.log(rows);
+            console.log(rows);
             if(rows.length) {
               part.analogs = rows;
             } else {
