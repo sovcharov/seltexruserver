@@ -5,7 +5,7 @@
   var express = require('express'),
   app = express(),
   mysql = require('mysql'),
-  nodemailer = require('nodemailer'),
+  // nodemailer = require('nodemailer'),
   mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
   myCTPConfig = require(__dirname + '/../serverconfig/myctpconfig.js'),
   port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
@@ -179,8 +179,16 @@
             } else {
               part.analogs = [];
             }
+            part.totalAvailable = 0;
+            part.totalAvailableAnalogs = 0;
+            // console.log(part.totalAvailable);
+            part.totalAvailable = parseFloat(part.stock) + parseFloat(part.msk) + parseFloat(part.ordered);
+            // console.log(part.stock);
+            for (var i = 0; i < part.analogs.length; i += 1) {
+              part.totalAvailableAnalogs += part.analogs[i].stock + part.analogs[i].msk + part.analogs[i].ordered;
+            }
             res.render('part', {part: part});
-            // console.log(rows[0]);
+            // console.log(part);
           });
           connection2.end();
         } else {

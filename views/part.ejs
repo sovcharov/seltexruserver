@@ -68,6 +68,11 @@
               </text>
             </div>
           <% }%>
+          <% if (!part.totalAvailable && part.totalAvailableAnalogs) {%>
+            <div style="display: inline-block; font-size: 20px; color: white; background: red; font-weight: bold; border-radius: 5px; padding: 5px; margin: 5px;">
+              ЕСТЬ АНАЛОГИ В НАЛИЧИИ:
+            </div>
+          <% }%>
           <!-- CTP QUOTE END -->
 
           <% if (part.analogs.length) {%>
