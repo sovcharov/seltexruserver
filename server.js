@@ -165,34 +165,35 @@
         //   console.log(rows);
         //   console.log(`PARAMETERS in NEW URL: ${req.params.url} ${req.params.url.length}`)
         // }
+
+        /////////////////////////////////
+        // HERE IS ANALOGS SEARCH QUERY:
+        ////////////////////////////////
+        part.analogs = [];
         if(rows[0].allNumbers[0].number !== ""){
           query = "select * from (SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc) as pp, inventoryManufacturers as mm, inventoryNumbers as nn where pp.id = nn.inventoryId and nn.manufacturerID = mm.id and nn.main = '1'";
           // console.log(query);
           connection2 = mysql.createConnection(mysqlConnection);
           connection2.query(query, function (err, rows, fields) {
             if(err) {
-              console.log(err);
-            }
-            // console.log(rows);
-            if(rows.length) {
-              part.analogs = rows;
+              console.log(err, part.id);
+              res.render('part', {part: part});
             } else {
-              part.analogs = [];
+              console.log("this is no error", part.id);
+              part.analogs = rows;
+              part.totalAvailable = 0;
+              part.totalAvailableAnalogs = 0;
+              // console.log(part.totalAvailable);
+              part.totalAvailable = parseFloat(part.stock) + parseFloat(part.msk) + parseFloat(part.ordered);
+              // console.log(part.stock);
+              for (var i = 0; i < part.analogs.length; i += 1) {
+                part.totalAvailableAnalogs += part.analogs[i].stock + part.analogs[i].msk + part.analogs[i].ordered;
+              }
+              res.render('part', {part: part});
             }
-            part.totalAvailable = 0;
-            part.totalAvailableAnalogs = 0;
-            // console.log(part.totalAvailable);
-            part.totalAvailable = parseFloat(part.stock) + parseFloat(part.msk) + parseFloat(part.ordered);
-            // console.log(part.stock);
-            for (var i = 0; i < part.analogs.length; i += 1) {
-              part.totalAvailableAnalogs += part.analogs[i].stock + part.analogs[i].msk + part.analogs[i].ordered;
-            }
-            res.render('part', {part: part});
-            // console.log(part);
           });
           connection2.end();
         } else {
-          part.analogs = [];
           res.render('part', {part: part});
         }
         // res.render('part', {part: rows[0]});
