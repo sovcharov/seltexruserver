@@ -179,7 +179,7 @@
               console.log(err, part.id);
               res.render('part', {part: part});
             } else {
-              console.log("this is no error", part.id);
+              // console.log("this is no error", part.id);
               part.analogs = rows;
               part.totalAvailable = 0;
               part.totalAvailableAnalogs = 0;
