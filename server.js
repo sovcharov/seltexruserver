@@ -83,8 +83,14 @@
     connection.query(query, function (err, rows, fields) {
       if (err) {
         res.render('notfound', {description: 'Ошибка базы данных'});
-      } else if (rows && rows[0].url) {
-        res.redirect(301, 'https://www.seltex.ru/cat/' + rows[0].url);
+      } else if (rows) {
+        //try to forward to url instead of id 
+        if (rows[0].url) {
+          res.redirect(301, 'https://www.seltex.ru/cat/' + rows[0].url);
+        } else {
+          console.log('There is rows, but no rows[0]', rows);
+          res.render('notfound', {description: 'Ошибка базы данных'});
+        }
       } else {
         query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id = " + req.params.partId + " order by inventoryNumbers.main desc";
         connection2 = mysql.createConnection(mysqlConnection);
