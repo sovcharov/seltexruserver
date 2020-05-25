@@ -8,15 +8,15 @@
   // nodemailer = require('nodemailer'),
   mysqlConnection = require(__dirname + '/../serverconfig/dbconnectmysqlnode.js'),
   myCTPConfig = require(__dirname + '/../serverconfig/myctpconfig.js'),
-  port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
+  // port = require(__dirname + '/../serverconfig/nodeconfig.js').serverPort,
   staticSitePath = require(__dirname + '/../serverconfig/nodeconfig.js').staticSitePath,
-  emailAuth = require(__dirname + '/../serverconfig/nodeconfig.js').emailAuth,
-  imagesDir = require(__dirname + '/../serverconfig/nodeconfig.js').imagesDir,
+  // emailAuth = require(__dirname + '/../serverconfig/nodeconfig.js').emailAuth,
+  // imagesDir = require(__dirname + '/../serverconfig/nodeconfig.js').imagesDir,
   secure = require(__dirname + '/../serverconfig/nodeconfig.js').https,
   getRidOfEmptyItems = require('./functions/myfunctions').getRidOfEmptyItems,
   getCTPPart = require('./functions/myfunctions').getCTPPart,
   createComplicatedQuery = require('./functions/myfunctions').createComplicatedQuery,
-  checkIfCat = require('./functions/myfunctions').checkIfCat,
+  // checkIfCat = require('./functions/myfunctions').checkIfCat,
   setCTPPriceRub = require(__dirname + '/../serverconfig/nodeconfig.js').setCTPPriceRub,
   setCTPPriceSeaRub = require(__dirname + '/../serverconfig/nodeconfig.js').setCTPPriceSeaRub,
   http = require('http'),
@@ -83,12 +83,12 @@
     connection.query(query, function (err, rows, fields) {
       if (err) {
         res.render('notfound', {description: 'Ошибка базы данных'});
-      } else if (rows) {
+      } else if (rows[0]) {
         //try to forward to url instead of id 
         if (rows[0].url) {
           res.redirect(301, 'https://www.seltex.ru/cat/' + rows[0].url);
         } else {
-          console.log('There is rows, but no rows[0]', rows);
+          console.log('There is rows[0], but no url', rows);
           res.render('notfound', {description: 'Ошибка базы данных'});
         }
       } else {
