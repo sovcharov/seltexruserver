@@ -169,10 +169,11 @@
           </div>
           <div>Вес, кг: <span><%= part.weight%></span></div>
           <br/>
-          <% if (part.image) { %>
-          <img src="/img/c15.jpg" alt="..." class="img-rounded my-part-image">
+          <% if (part.images.length) { %>
+          <img src="/img/db/<%= part.images[0] %>" alt="..." class="img-responsive img-rounded my-part-image">
+          <span></span>
           <% } else { %>
-          <img src="/img/db/nophoto.png" alt="Нет фотографии" class="img-responsive img-rounded  my-part-image">
+           <img src="/img/db/nophoto.png" alt="Нет фотографии" class="img-responsive img-rounded  my-part-image">
           <% } %>
     </div>
   </div>

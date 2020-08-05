@@ -153,7 +153,15 @@
     var query = "SELECT p.description, p.comment, p.weight, inventoryManufacturers.fullName as manufacturerFullName, inventoryManufacturers.id as manufacturerID, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.msk, inventoryManufacturers.fullName from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.url = '" + req.params.url + "' order by inventoryNumbers.main desc",
     connection = mysql.createConnection(mysqlConnection),
     connection2,
-    part;
+    part,
+    query2,
+    imagesReady = false,
+    dataReady = false,
+    renderPage = function (part) {
+      if (dataReady && imagesReady) {
+        res.render('part', {part: part});
+      }
+    };
 
     connection.query(query, function (err, rows, fields) {
       if (err) {
@@ -176,19 +184,32 @@
         //   console.log(rows);
         //   console.log(`PARAMETERS in NEW URL: ${req.params.url} ${req.params.url.length}`)
         // }
-
+        part.images = [];
+        query = "select * from inventoryImages where inventoryId = " + part.id + " order by main desc"
+        connection.query(query, function (err, rows, fields) {
+          for (var i = 0; i < rows.length; i += 1) {
+            part.images[part.images.length] = "1-" + rows[i].inventoryId + "-" + rows[i].id + ".png";
+            // console.log(part.images);
+          }
+          // console.log(part.images);
+          imagesReady = true;
+          renderPage(part);
+        });
+        connection.end();
         /////////////////////////////////
         // HERE IS ANALOGS SEARCH QUERY:
         ////////////////////////////////
         part.analogs = [];
         if(rows[0].allNumbers[0].number !== ""){
-          query = "select * from (SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc) as pp, inventoryManufacturers as mm, inventoryNumbers as nn where pp.id = nn.inventoryId and nn.manufacturerID = mm.id and nn.main = '1'";
+          query2 = "select * from (SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc) as pp, inventoryManufacturers as mm, inventoryNumbers as nn where pp.id = nn.inventoryId and nn.manufacturerID = mm.id and nn.main = '1'";
           // console.log(query);
           connection2 = mysql.createConnection(mysqlConnection);
-          connection2.query(query, function (err, rows, fields) {
+          connection2.query(query2, function (err, rows, fields) {
             if(err) {
               console.log(err, part.id);
-              res.render('part', {part: part});
+              dataReady = true;
+              renderPage(part);
+              // res.render('part', {part: part});
             } else {
               // console.log("this is no error", part.id);
               part.analogs = rows;
@@ -200,19 +221,25 @@
               for (var i = 0; i < part.analogs.length; i += 1) {
                 part.totalAvailableAnalogs += part.analogs[i].stock + part.analogs[i].msk + part.analogs[i].ordered;
               }
-              res.render('part', {part: part});
+              dataReady = true;
+              renderPage(part);
+              // res.render('part', {part: part});
             }
           });
           connection2.end();
         } else {
-          res.render('part', {part: part});
+          dataReady = true;
+          renderPage(part);
+          // res.render('part', {part: part});
         }
         // res.render('part', {part: rows[0]});
       } else {
         res.render('notfound', {description: 'Страницы не существует'});
       }
-      connection.end();
     });
+
+
+
   });
 
   app.get(['/catalog/:search','/catalog/*'], function (req, res) {
