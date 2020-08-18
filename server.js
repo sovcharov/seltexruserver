@@ -131,12 +131,14 @@
                 } else {
                   part.analogs = [];
                 }
+                part.images = [];
                 res.render('part', {part: part});
                 // console.log(rows[0]);
               });
               connection3.end();
             } else {
               part.analogs = [];
+              part.images = [];
               res.render('part', {part: part});
             }
             // res.render('part', {part: rows[0]});
