@@ -80,6 +80,8 @@
     connection3,
     part;
 
+    part.images = [];
+
     connection.query(query, function (err, rows, fields) {
       //what are rows
       var isRowsOK = false;
