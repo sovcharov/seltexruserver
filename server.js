@@ -573,7 +573,8 @@
     // app.get("/*", function (req, res) { //old get
     // console.log('inerror ');
     // res.sendFile(__dirname+'/dist/index.html');
-    res.render('notfound', {description: 'Страницы не существует'});
+    res.redirect(301, 'https://www.seltex.ru/catalog/');
+    // res.render('notfound', {description: 'Страницы не существует'});
   });
 
 }());
