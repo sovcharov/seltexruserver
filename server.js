@@ -203,7 +203,15 @@
         ////////////////////////////////
         part.analogs = [];
         if(rows[0].allNumbers[0].number !== ""){
-          query2 = "select * from (SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + rows[0].allNumbers[0].number + "' order by p.stock desc, p.ordered desc) as pp, inventoryManufacturers as mm, inventoryNumbers as nn where pp.id = nn.inventoryId and nn.manufacturerID = mm.id and nn.main = '1'";
+          let searchStringForAnalogs = rows[0].allNumbers[0].number;
+          if(rows[0].manufacturerID === 13) {
+            searchStringForAnalogs = rows[0].allNumbers[0].number.replace(/^b[0-9]/i, function (x) {
+              return x.replace(/^b/i, "");
+            }); // replaces first b only if it followed by a number
+            // searchStringForAnalogs = rows[0].allNumbers[0].number.replace(/^b/gi, ""); // old version with all b
+          }
+          // console.log(searchStringForAnalogs);
+          query2 = "select * from (SELECT distinct p.description, p.comment, p.weight, inventoryNumbers.number, p.id, p.price, p.stock, p.ordered, p.link, p.url, p.msk from inventoryNumbers, inventory as p, inventoryManufacturers where inventoryManufacturers.id = inventoryNumbers.manufacturerId and inventoryNumbers.inventoryId = p.id and p.id <> " + rows[0].id + " and inventoryNumbers.number = '" + searchStringForAnalogs + "' order by p.stock desc, p.ordered desc) as pp, inventoryManufacturers as mm, inventoryNumbers as nn where pp.id = nn.inventoryId and nn.manufacturerID = mm.id and nn.main = '1'";
           // console.log(query);
           connection2 = mysql.createConnection(mysqlConnection);
           connection2.query(query2, function (err, rows, fields) {
