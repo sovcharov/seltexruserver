@@ -2,7 +2,7 @@
   "name": "seltexruserver",
   "version": "1.0.0",
   "description": "node server to seltexru",
-  "main": "seltexisserver.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --harmony server.js"
