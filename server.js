@@ -577,7 +577,13 @@
     res.sendFile(path.join(sisPath));
   });
 
-  app.get(/^\/(?!sis\/).*$/, function (req, res) {
+  app.get('/sisapp/*', function (req, res) {
+    var sisPath = __dirname + staticSitePath + '/sisapp/index.html';
+    // console.log(path);
+    res.sendFile(path.join(sisPath));
+  });
+
+  app.get(/^\/(?!sisapp\/).*$/, function (req, res) {
     // app.get("/*", function (req, res) { //old get
     // console.log('inerror ');
     // res.sendFile(__dirname+'/dist/index.html');
