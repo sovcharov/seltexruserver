@@ -578,7 +578,7 @@
   });
 
   app.get('/sisapp/*', function (req, res) {
-    var sisPath = __dirname + staticSitePath + '/sisapp/index.html';
+    var sisPath = __dirname + staticSitePath + '/sisapp/browser/index.html';
     // console.log(path);
     res.sendFile(path.join(sisPath));
   });
