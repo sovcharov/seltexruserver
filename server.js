@@ -57,6 +57,7 @@
 
   // app.use('/assets', express.static(__dirname + '/public'));
   app.use('/', express.static(__dirname + staticSitePath));
+  app.use('/sisapp/', express.static(__dirname + staticSitePath + "/sisapp/browser/"));
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
 
