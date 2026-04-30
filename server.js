@@ -583,7 +583,7 @@
     res.sendFile(path.join(sisPath));
   });
 
-  app.get(/^\/(?!sisapp\/).*$/, function (req, res) {
+  app.get(/^\/(?!sis\/).*$/, function (req, res) {
     // app.get("/*", function (req, res) { //old get
     // console.log('inerror ');
     // res.sendFile(__dirname+'/dist/index.html');
